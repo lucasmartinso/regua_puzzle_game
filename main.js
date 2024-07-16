@@ -2,11 +2,24 @@
 function embaralhaSistema(n, pecas) { 
     //primeiro aleatoriza a posicao que vai ficar vazia no vetor
     const indVazio = Math.floor(Math.random() * n);
-    pecas[indVazio] = undefined;
+    pecas[indVazio] = null;
 
     //aleatoriza as posicoes das duas cores 
-    for(let i=0; i<n; i++) { 
+    for(let i=0; i<n-1; i++) { 
+        let find = false; 
         
+        while(!find) { 
+            const ind = Math.floor(Math.random() * n);
+
+            if(pecas[ind] === undefined) {
+                pecas[ind] = i % 2 === 0 ? 'P' : 'V'; 
+                find = true;       
+            }
+        }
+    }
+
+    for(let i=0; i<n; i++) { 
+        console.log(pecas[i]);
     }
 }
 
