@@ -1,3 +1,4 @@
+const backtracking = require("./algoritmos/backtracking");
 
 function embaralhaSistema(n, pecas) { 
     //primeiro aleatoriza a posicao que vai ficar vazia no vetor
@@ -17,10 +18,6 @@ function embaralhaSistema(n, pecas) {
             }
         }
     }
-
-    for(let i=0; i<n; i++) { 
-        console.log(pecas[i]);
-    }
 }
 
 //n blocos pretos e n blocos brancos + um espaço vazio
@@ -29,6 +26,7 @@ function main(n) {
     const pecas = [];
 
     embaralhaSistema(tamSistema, pecas);
+    backtracking();
 }
 
-main(5);
+main(2);
