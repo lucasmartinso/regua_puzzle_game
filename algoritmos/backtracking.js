@@ -61,6 +61,19 @@ export function backtracking(n) {
                     break;
                 }
             }
+
+            //tenta a terceira jogada
+            else if(i==2 && indVazio>=0) { //so da pra andar para direita se o espaco vazio nao for a borda esquerda
+                const auxTrocaPeca = copiaFichas[indVazio-2]; 
+                copiaFichas[indVazio] = auxTrocaPeca; 
+                copiaFichas[indVazio+2] = null;
+
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
+                    fichas = copiaFichas;
+                    caminho.push(fichas);
+                    break;
+                }
+            }
         }
         console.log(fichas);
     //}
