@@ -51,7 +51,15 @@ export function backtracking(n) {
 
             //tenta a segunda jogada
             else if(i==1 && indVazio<=n-3) { //so da pra fazer o salto a esquerda, se o espaco vazio estiver no max 2 posicoes da borda da direita, ou seja, n-3(antepenultima)
+                const auxTrocaPeca = copiaFichas[indVazio-2]; 
+                copiaFichas[indVazio] = auxTrocaPeca; 
+                copiaFichas[indVazio+2] = null;
 
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
+                    fichas = copiaFichas;
+                    caminho.push(fichas);
+                    break;
+                }
             }
         }
         console.log(fichas);
