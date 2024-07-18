@@ -1,4 +1,4 @@
-const backtracking = require("./algoritmos/backtracking");
+import { backtracking } from "./algoritmos/backtracking.js";
 
 function embaralhaSistema(n, pecas) { 
     //primeiro aleatoriza a posicao que vai ficar vazia no vetor
@@ -26,7 +26,7 @@ function main(n) {
     const pecas = [];
 
     embaralhaSistema(tamSistema, pecas);
-    backtracking();
+    backtracking(tamSistema);
 }
 
 main(2);
