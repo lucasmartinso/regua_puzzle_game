@@ -1,5 +1,5 @@
 export function backtracking(n) { 
-    const fichas = ['P','V',null,'V','P'];
+    let fichas = ['P','V',null,'V','P'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     let custo = 0; 
     let profundidade = 0; 
@@ -30,11 +30,23 @@ export function backtracking(n) {
         for(let i=0; i<jogadas.length; i++) { 
             const indVazio = fichas.indexOf(null); //indice do espaco vazio
 
+            //cria uma copia das fichas atuais
+            const copiaFichas = []; 
+            for(let j=0; j<fichas.length; j++) { 
+                copiaFichas[j] = fichas[j];
+            }
+
             //tenta primeira jogada
             if(i==0 && indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
-                const auxTrocaPeca = fichas[indVazio-2]; 
-                fichas[indVazio] = auxTrocaPeca; 
-                fichas[indVazio-2] = null;
+                const auxTrocaPeca = copiaFichas[indVazio-2]; 
+                copiaFichas[indVazio] = auxTrocaPeca; 
+                copiaFichas[indVazio-2] = null;
+
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
+                    fichas = copiaFichas;
+                    caminho.push(fichas);
+                    break;
+                }
             }
 
             //tenta a segunda jogada
@@ -42,27 +54,11 @@ export function backtracking(n) {
 
             }
         }
-        //console.log(fichas);
+        console.log(fichas);
     //}
-    
-    const indVazio = fichas.indexOf(null); //indice do espaco vazio
-    caminho.push(fichas); 
-    console.log(caminho);
-    console.log(fichas);
-    console.log(verificaRepeticaoEstados(caminho,fichas, indVazio));
 }
 
 function verificaRepeticaoEstados(caminho, fichas, indVazio) {
-    //simula a troca
-    const copiaFichas = []; 
-    for(let i=0; i<fichas.length; i++) { 
-        copiaFichas[i] = fichas[i];
-    }
-
-    const auxTrocaPeca = copiaFichas[indVazio-2]; 
-    copiaFichas[indVazio] = auxTrocaPeca; 
-    copiaFichas[indVazio-2] = null;
-
     for(let i=0; i<caminho.length; i++) { 
         const repetiu = caminho[i].every((value, index) => value === fichas[index]);
 

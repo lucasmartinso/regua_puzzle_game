@@ -1,5 +1,13 @@
 import { backtracking } from "./algoritmos/backtracking.js";
 
+function main(n) { 
+    const tamSistema = 2*n + 1; //n blocos pretos e n blocos brancos + um espaço vazio
+    const pecas = [];
+
+    embaralhaSistema(tamSistema, pecas);
+    backtracking(tamSistema);
+}
+
 function embaralhaSistema(n, pecas) { 
     //primeiro aleatoriza a posicao que vai ficar vazia no vetor
     const indVazio = Math.floor(Math.random() * n);
@@ -18,15 +26,6 @@ function embaralhaSistema(n, pecas) {
             }
         }
     }
-}
-
-//n blocos pretos e n blocos brancos + um espaço vazio
-function main(n) { 
-    const tamSistema = 2*n + 1; 
-    const pecas = [];
-
-    embaralhaSistema(tamSistema, pecas);
-    backtracking(tamSistema);
 }
 
 main(2);
