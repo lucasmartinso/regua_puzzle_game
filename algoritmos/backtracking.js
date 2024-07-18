@@ -4,18 +4,19 @@ export function backtracking(n) {
     let custo = 0; 
     let profundidade = 0; 
     let sucessFail = undefined;
-    const caminho = [fichas];
-    const aberta = [fichas]; //nos expandidos
-    const fechada = [fichas]; //nos visitados
-    const estInicial = []; 
+    const caminho = [[]];
+    const aberta = [[]]; //nos expandidos
+    const fechada = [[]]; //nos visitados
+    const estInicial = [[]]; 
 
     //define o estado inicial
-    console.log(`ESTADO INICIAL: ${fichas}`);
-    console.log(caminho);
+    console.log(`ESTADO INICIAL: ${fichas}\n`);
     for(let i=0; i<n; i++) { 
         estInicial[i] = fichas[i];
+        caminho[0][i] = fichas[i];
+        aberta[0][i] = fichas[i];
+        fechada[0][i] = fichas[i];
     }
-
     //------------------ ALGORTIMO ------------------
 
     //ESTADO INICIAL: RANDOMICO
@@ -41,14 +42,32 @@ export function backtracking(n) {
 
             }
         }
-        console.log(fichas);
+        //console.log(fichas);
     //}
+    
+    const indVazio = fichas.indexOf(null); //indice do espaco vazio
+    caminho.push(fichas); 
+    console.log(caminho);
+    console.log(fichas);
+    console.log(verificaRepeticaoEstados(caminho,fichas, indVazio));
 }
 
-function verificaRepeticaoEstados(caminho, fichas) { 
-    for(let i=0; i<caminho.length; i++) { 
-        for(let j=0; j<fichas.length; j++) { 
-            if(fichas[j] !== caminho[i][j]) break;
-        }
+function verificaRepeticaoEstados(caminho, fichas, indVazio) {
+    //simula a troca
+    const copiaFichas = []; 
+    for(let i=0; i<fichas.length; i++) { 
+        copiaFichas[i] = fichas[i];
     }
+
+    const auxTrocaPeca = copiaFichas[indVazio-2]; 
+    copiaFichas[indVazio] = auxTrocaPeca; 
+    copiaFichas[indVazio-2] = null;
+
+    for(let i=0; i<caminho.length; i++) { 
+        const repetiu = caminho[i].every((value, index) => value === fichas[index]);
+
+        if(repetiu) return true; //achou um estado repetido
+    }
+
+    return false; //passou por todos estados do caminho e nenhum deles era repetido
 }
