@@ -1,5 +1,5 @@
 export function backtracking(n) { 
-    const fichas = [null,'P','V','V','P'];
+    const fichas = ['P','V',null,'V','P'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     let custo = 0; 
     let profundidade = 0; 
@@ -30,9 +30,25 @@ export function backtracking(n) {
             const indVazio = fichas.indexOf(null); //indice do espaco vazio
 
             //tenta primeira jogada
-            if(i==0 && indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo na posicao 2 
-                
+            if(i==0 && indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
+                const auxTrocaPeca = fichas[indVazio-2]; 
+                fichas[indVazio] = auxTrocaPeca; 
+                fichas[indVazio-2] = null;
+            }
+
+            //tenta a segunda jogada
+            else if(i==1 && indVazio<=n-3) { //so da pra fazer o salto a esquerda, se o espaco vazio estiver no max 2 posicoes da borda da direita, ou seja, n-3(antepenultima)
+
             }
         }
+        console.log(fichas);
     //}
+}
+
+function verificaRepeticaoEstados(caminho, fichas) { 
+    for(let i=0; i<caminho.length; i++) { 
+        for(let j=0; j<fichas.length; j++) { 
+            if(fichas[j] !== caminho[i][j]) break;
+        }
+    }
 }
