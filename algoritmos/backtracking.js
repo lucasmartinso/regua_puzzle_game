@@ -24,10 +24,10 @@ export function backtracking(n) {
     //ESTRATÉGIA DE CONTROLE: Pula para direita(PD), Pula para esquerda(PE), Anda para direita(AD), Anda para esquerda(AE)
 
     const jogadas = ['PD','PE','AD','AE'];
-
-    //while(sucessFail !== true || sucessFail !== false) { 
+    let j=0;
+    while(j<=2) { 
         //faz jogada 
-        for(let i=0; i<jogadas.length; i++) { 
+        for(let i=0; i<jogadas.length; i++) {
             const indVazio = fichas.indexOf(null); //indice do espaco vazio
 
             //cria uma copia das fichas atuais
@@ -38,6 +38,7 @@ export function backtracking(n) {
 
             //tenta primeira jogada
             if(i==0 && indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
+                console.log("JOGADA 1");
                 const auxTrocaPeca = copiaFichas[indVazio-2]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio-2] = null;
@@ -51,7 +52,8 @@ export function backtracking(n) {
 
             //tenta a segunda jogada
             else if(i==1 && indVazio<=n-3) { //so da pra fazer o salto a esquerda, se o espaco vazio estiver no max 2 posicoes da borda da direita, ou seja, n-3(antepenultima)
-                const auxTrocaPeca = copiaFichas[indVazio-2]; 
+                console.log("JOGADA 2");
+                const auxTrocaPeca = copiaFichas[indVazio+2]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio+2] = null;
 
@@ -63,10 +65,11 @@ export function backtracking(n) {
             }
 
             //tenta a terceira jogada
-            else if(i==2 && indVazio>=0) { //so da pra andar para direita se o espaco vazio nao for a borda esquerda
-                const auxTrocaPeca = copiaFichas[indVazio-2]; 
+            else if(i==2 && indVazio>0) { //so da pra andar para direita se o espaco vazio nao for a borda esquerda
+                console.log("JOGADA 3");
+                const auxTrocaPeca = copiaFichas[indVazio-1]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
-                copiaFichas[indVazio+2] = null;
+                copiaFichas[indVazio-1] = null;
 
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     fichas = copiaFichas;
@@ -74,12 +77,51 @@ export function backtracking(n) {
                     break;
                 }
             }
+
+            //tenta a quarta jogada
+            else if(i==2 && indVazio<n-1) { //so da pra andar para direita se o espaco vazio nao for a borda direita
+                console.log("JOGADA 4");
+                const auxTrocaPeca = copiaFichas[indVazio+1]; 
+                copiaFichas[indVazio] = auxTrocaPeca; 
+                copiaFichas[indVazio+1] = null;
+
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
+                    fichas = copiaFichas;
+                    caminho.push(fichas);
+                    break;
+                } 
+            } //else fazer o backtracking, remover o ultimo estado do caminho e voltar para ultima posicao do caminho
+        
+            //console.log(copiaFichas);
         }
-        console.log(fichas);
-    //}
+
+        //console.log(copiaFichas);
+
+        //verifica se eh o estado final
+        const indVazio = fichas.indexOf(null);
+        const somaSe = indVazio / (n/2 + 1) ? 0 : 1; 
+        const primeiroEstado = fichas[0] === null ? fichas[1] : fichas[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
+        const teste = true;
+        for(let i=0; i<fichas.length/2 + somaSe; i++) {
+            if(!fichas[i] === null) { 
+                if(primeiroEstado !== fichas[i]) { 
+                    teste = false;
+                    break;
+                }
+            }
+        }
+
+        if(teste) sucessFail = true;
+
+        custo++;
+        j++;
+        console.log("\n");
+    }
 }
 
 function verificaRepeticaoEstados(caminho, fichas, indVazio) {
+    console.log(caminho); 
+    console.log(fichas);
     for(let i=0; i<caminho.length; i++) { 
         const repetiu = caminho[i].every((value, index) => value === fichas[index]);
 
