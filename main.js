@@ -5,7 +5,7 @@ function main(n) {
     const pecas = [];
 
     embaralhaSistema(tamSistema, pecas);
-    backtracking(tamSistema);
+    backtracking(tamSistema, pecas);
 }
 
 function embaralhaSistema(n, pecas) { 

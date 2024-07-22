@@ -1,5 +1,5 @@
-export function backtracking(n) { 
-    let fichas = ['P','V',null,'V','P'];
+export function backtracking(n, fichas) { 
+    //let fichas = ['P','V',null,'V','P'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     let custo = 0; 
     let profundidade = 0; 
@@ -24,8 +24,31 @@ export function backtracking(n) {
     //ESTRATÉGIA DE CONTROLE: Pula para direita(PD), Pula para esquerda(PE), Anda para direita(AD), Anda para esquerda(AE)
 
     const jogadas = ['PD','PE','AD','AE'];
-    let j=0;
-    while(j<=2) { 
+    while(sucessFail !== true && sucessFail !== false) { 
+        //verifica se eh o estado final
+        const indVazio = fichas.indexOf(null);
+        const somaSe = indVazio / (n/2) ? 0 : 1; 
+        const primeiroEstado = fichas[0] === null ? fichas[1] : fichas[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
+        let teste = true;
+        console.log("\nCOMPARACAO: ");
+        for(let i=0; i<fichas.length/2 + somaSe; i++) {
+            if(fichas[i] !== null) {
+                console.log(`${primeiroEstado} == ${fichas[i]} ???`) 
+                if(primeiroEstado !== fichas[i]) { 
+                    teste = false;
+                    break;
+                }
+            }
+        }
+
+        if(teste) {
+            sucessFail = true;
+            console.log("SUCESSO");
+        }
+
+
+
+
         //faz jogada 
         for(let i=0; i<jogadas.length; i++) {
             const indVazio = fichas.indexOf(null); //indice do espaco vazio
@@ -95,26 +118,9 @@ export function backtracking(n) {
             //console.log(copiaFichas);
         }
 
-        //console.log(copiaFichas);
-
-        //verifica se eh o estado final
-        const indVazio = fichas.indexOf(null);
-        const somaSe = indVazio / (n/2 + 1) ? 0 : 1; 
-        const primeiroEstado = fichas[0] === null ? fichas[1] : fichas[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
-        const teste = true;
-        for(let i=0; i<fichas.length/2 + somaSe; i++) {
-            if(!fichas[i] === null) { 
-                if(primeiroEstado !== fichas[i]) { 
-                    teste = false;
-                    break;
-                }
-            }
-        }
-
-        if(teste) sucessFail = true;
+        //console.log(copiaFichas); 
 
         custo++;
-        j++;
         console.log("\n");
     }
 }
