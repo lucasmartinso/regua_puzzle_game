@@ -44,9 +44,8 @@ export function backtracking(n, fichas) {
         if(teste) {
             sucessFail = true;
             console.log("SUCESSO");
+            break;
         }
-
-
 
 
         //faz jogada 
@@ -88,7 +87,7 @@ export function backtracking(n, fichas) {
             }
 
             //tenta a terceira jogada
-            else if(i==2 && indVazio>0) { //so da pra andar para direita se o espaco vazio nao for a borda esquerda
+            else if(i==2 && indVazio>0) { //so da pra andar para esquerda se o espaco vazio nao for a borda esquerda
                 console.log("JOGADA 3");
                 const auxTrocaPeca = copiaFichas[indVazio-1]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
@@ -102,7 +101,7 @@ export function backtracking(n, fichas) {
             }
 
             //tenta a quarta jogada
-            else if(i==2 && indVazio<n-1) { //so da pra andar para direita se o espaco vazio nao for a borda direita
+            else if(i==3 && indVazio<n-1) { //so da pra andar para direita se o espaco vazio nao for a borda direita
                 console.log("JOGADA 4");
                 const auxTrocaPeca = copiaFichas[indVazio+1]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
@@ -113,8 +112,12 @@ export function backtracking(n, fichas) {
                     caminho.push(fichas);
                     break;
                 } 
-            } //else fazer o backtracking, remover o ultimo estado do caminho e voltar para ultima posicao do caminho
-        
+            } 
+            
+            else { //backtracking, se nao da pra fazer nenhuma das anteriores
+                console.log("BACKTRACKING");
+                fichas = caminho.pop();
+            }
             //console.log(copiaFichas);
         }
 
