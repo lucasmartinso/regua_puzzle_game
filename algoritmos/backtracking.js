@@ -9,6 +9,7 @@ export function backtracking(n) {
     const estInicial = []; 
     const proibidos = [{estado: [], block: []}]; //nao repetir a jogada que resultou em backtracking, add em um objeto cada estado e um vetor de blockPlays 
     const jogatinas = [];
+    let j = 0;
 
     //define o estado inicial
     console.log(`ESTADO INICIAL: ${fichas}\n`);
@@ -26,7 +27,7 @@ export function backtracking(n) {
     console.time('TEMPO DE EXECUCAO'); //comeca a marcar o tempo
 
     const jogadas = ['PD','PE','AD','AE'];
-    while(sucessFail !== true && sucessFail !== false) { 
+    while(j<=10) { //sucessFail !== true && sucessFail !== false 
         //verifica se eh o estado final
         const indVazio = fichas.indexOf(null);
         const somaSe = indVazio > Math.floor(n/2) ? 0 : 1; //se o espaco ta na metade pra frente faz apenas 2 comparacoes, se estiver antes disso faz 3 comparacoes
@@ -75,7 +76,7 @@ export function backtracking(n) {
 
                 const backState = verifyBackState(proibidos, copiaFichas, n);
 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (backState===-1 || !proibidos[backState].block.includes(0))) {
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     jogatinas.push(0);
                     fichas = copiaFichas;
                     caminho.push(fichas);
@@ -90,13 +91,13 @@ export function backtracking(n) {
             //tenta a segunda jogada
             else if(i==1 && indVazio<=n-3) { //so da pra fazer o salto a esquerda, se o espaco vazio estiver no max 2 posicoes da borda da direita, ou seja, n-3(antepenultima)
                 console.log("JOGADA 2");
+                const backState = verificaRepeticaoEstados(caminho,copiaFichas, indVazio); //vai verificar se esta em estado de bt ou nn
+
                 const auxTrocaPeca = copiaFichas[indVazio+2]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio+2] = null;
-
-                const backState = verifyBackState(proibidos, copiaFichas, n);
                 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (backState===-1 || !proibidos[backState].block.includes(1))) {
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!backState || proibidos[proibidos.length-1].block.includes(1))) {
                     jogatinas.push(1);
                     fichas = copiaFichas;
                     caminho.push(fichas);
@@ -111,13 +112,14 @@ export function backtracking(n) {
             //tenta a terceira jogada
             else if(i==2 && indVazio>0) { //so da pra andar para esquerda se o espaco vazio nao for a borda esquerda
                 console.log("JOGADA 3");
+                console.log(fichas);
                 const auxTrocaPeca = copiaFichas[indVazio-1]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio-1] = null;
 
                 const backState = verifyBackState(proibidos, copiaFichas, n);
                 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (backState===-1 || !proibidos[backState].block.includes(1))) {
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     jogatinas.push(2);
                     fichas = copiaFichas;
                     caminho.push(fichas);
@@ -138,7 +140,7 @@ export function backtracking(n) {
 
                 const backState = verifyBackState(proibidos, copiaFichas, n);
                 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (backState===-1 || !proibidos[backState].block.includes(1))) {
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     jogatinas.push(3);
                     fichas = copiaFichas;
                     caminho.push(fichas);
@@ -152,19 +154,35 @@ export function backtracking(n) {
             
             else if(i==3) bt(caminho, fichas, custo, profundidade, jogatinas, proibidos); //backtracking, se nao da pra fazer nenhuma das anteriores
         }
-        //console.log(proibidos);
         console.log(jogatinas);
         console.log("\n");
+        j++;
     }
 
-    console.log(`\nCUSTO DA OPERACAO: ${custo}`);
-    console.log(`PROFUNDIDADE ALCANCADA: ${profundidade}`);
-    console.log(`NOS VISITADOS ${expandidos+1}, NOS EXPANDIDOS ${expandidos}`);
-    console.timeEnd('TEMPO DE EXECUCAO');
-    console.log("CAMINHO: ");
-    for(let i=0; i<caminho.length; i++) {
-        console.log(caminho[i],"-->");
+    //console.log(`\nCUSTO DA OPERACAO: ${custo}`);
+    //console.log(`PROFUNDIDADE ALCANCADA: ${profundidade}`);
+    //console.log(`NOS VISITADOS ${expandidos+1}, NOS EXPANDIDOS ${expandidos}`);
+    //console.timeEnd('TEMPO DE EXECUCAO');
+    //console.log("CAMINHO: ");
+    //for(let i=0; i<caminho.length; i++) {
+    //    console.log(caminho[i],"-->");
+    //}
+}
+
+function bt(caminho, fichas, custo, profundidade, jogatinas, proibidos) { 
+    console.log("BACKTRACKING");
+    caminho.pop();
+    proibidos.pop();
+    const indJogada = jogatinas.pop(); //jogada anterior que caiu no estado que foi um backtracking
+    proibidos[proibidos.length-1].block.push(indJogada);
+    console.log(proibidos[proibidos.length-1]);
+    custo += 3;
+    profundidade--;
+
+    for(let k=0; k<fichas.length; k++) { 
+        fichas[k] = caminho[caminho.length-1][k];
     }
+    console.log(fichas);
 }
 
 function verifyBackState(proibidos, fichas, n) { 
@@ -182,19 +200,6 @@ function verifyBackState(proibidos, fichas, n) {
     }
 
     return ind; //nao eh um estado de backtracking
-}
-
-function bt(caminho, fichas, custo, profundidade, jogatinas, proibidos) { 
-    console.log("BACKTRACKING");
-    fichas = caminho.pop();
-    proibidos.pop();
-    const indJogada = jogatinas.pop(); //jogada anterior que caiu no estado que foi um backtracking
-    console.log(indJogada);
-    proibidos[proibidos.length-1].block.push(indJogada);
-    console.log(proibidos[proibidos.length-1]);
-    custo += 3;
-    profundidade--;
-    process.exit(0);
 }
 
 function verificaRepeticaoEstados(caminho, fichas, indVazio) {
