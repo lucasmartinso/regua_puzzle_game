@@ -3,9 +3,10 @@ export function backtracking(n, fichas) {
     let custo = 0; 
     let profundidade = 0; 
     let sucessFail = undefined;
-    const caminho = [[]];
     let expandidos = 0; //nos expandidos
-    const estInicial = [[]]; 
+    const caminho = [[]];
+    const estInicial = []; 
+    const proibidos = [];
 
     //define o estado inicial
     console.log(`ESTADO INICIAL: ${fichas}\n`);
@@ -45,7 +46,7 @@ export function backtracking(n, fichas) {
             sucessFail = true;
             console.log("SUCESSO");
             break;
-        }
+        } //else FRACASSO, se voltar no estado inicial e nao tiver mais jogadas
 
 
         //faz jogada 
