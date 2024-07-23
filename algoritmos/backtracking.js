@@ -1,4 +1,5 @@
-export function backtracking(n, fichas) { 
+export function backtracking(n) { 
+    let fichas = ['P','V','V',null,'P'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     let custo = 0; 
     let profundidade = 0; 
@@ -6,13 +7,14 @@ export function backtracking(n, fichas) {
     let expandidos = 0; //nos expandidos
     const caminho = [[]];
     const estInicial = []; 
-    const proibidos = []; //nao repetir a jogada que resultou em backtracking, add em um objeto cada estado e um vetor de blockPlays 
+    const proibidos = [{estado: [], block: []}]; //nao repetir a jogada que resultou em backtracking, add em um objeto cada estado e um vetor de blockPlays 
 
     //define o estado inicial
     console.log(`ESTADO INICIAL: ${fichas}\n`);
     for(let i=0; i<n; i++) { 
         estInicial[i] = fichas[i];
         caminho[0][i] = fichas[i];
+        proibidos[0].estado[i] = fichas[i];
     }
     //------------------ ALGORTIMO ------------------
 
@@ -57,14 +59,16 @@ export function backtracking(n, fichas) {
         for(let i=0; i<jogadas.length; i++) {
             const indVazio = fichas.indexOf(null); //indice do espaco vazio
 
-            //cria uma copia das fichas atuais
+            //cria uma copia das fichas atuais para fazer os testes de estado
             const copiaFichas = []; 
             for(let j=0; j<fichas.length; j++) { 
                 copiaFichas[j] = fichas[j];
             }
 
+            //const backState = estBacktrack
+
             //tenta primeira jogada
-            if(i==0 && indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
+            if(i==0 && indVazio>=2 && proibidos) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
                 console.log("JOGADA 1");
                 const auxTrocaPeca = copiaFichas[indVazio-2]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
@@ -73,6 +77,7 @@ export function backtracking(n, fichas) {
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
+                    proibidos.push({estado: fichas, block: []});
                     custo += 2;
                     profundidade++;
                     expandidos++;
@@ -90,6 +95,7 @@ export function backtracking(n, fichas) {
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
+                    proibidos.push({estado: fichas, block: [0]});
                     custo += 2;
                     profundidade++;
                     expandidos++;
@@ -107,6 +113,7 @@ export function backtracking(n, fichas) {
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
+                    proibidos.push({estado: fichas, block: [0,1]});
                     custo ++;
                     profundidade++;
                     expandidos++;
@@ -124,6 +131,7 @@ export function backtracking(n, fichas) {
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
+                    proibidos.push({estado: fichas, block: [0,1,2]});
                     custo ++;
                     profundidade++;
                     expandidos++;
@@ -146,6 +154,23 @@ export function backtracking(n, fichas) {
     }
 }
 
+function verifyBackState(proibidos, fichas, n) { 
+    const ind = -1;
+
+    for(let i=proibidos.length-1; i>=0; i--) { 
+        ind = i;
+        for(let j=0; j<n; j++) {
+            if(proibidos[i].estado[j] !== fichas[j]) {
+                ind = -1;
+                break;
+            }  
+        }
+        if(ind!==-1) return ind; //eh um estado de backtracking
+    }
+
+    return ind; //nao eh um estado de backtracking
+}
+
 function bt(caminho, fichas, custo, profundidade) { 
     console.log("BACKTRACKING");
     fichas = caminho.pop();
@@ -154,7 +179,7 @@ function bt(caminho, fichas, custo, profundidade) {
 }
 
 function verificaRepeticaoEstados(caminho, fichas, indVazio) {
-    console.log(caminho); 
+    console.log(caminho);
     console.log(fichas);
     for(let i=0; i<caminho.length; i++) { 
         const repetiu = caminho[i].every((value, index) => value === fichas[index]);
