@@ -6,7 +6,7 @@ export function backtracking(n, fichas) {
     let expandidos = 0; //nos expandidos
     const caminho = [[]];
     const estInicial = []; 
-    const proibidos = [];
+    const proibidos = []; //nao repetir a jogada que resultou em backtracking, add em um objeto cada estado e um vetor de blockPlays 
 
     //define o estado inicial
     console.log(`ESTADO INICIAL: ${fichas}\n`);
@@ -46,7 +46,11 @@ export function backtracking(n, fichas) {
             sucessFail = true;
             console.log("SUCESSO");
             break;
-        } //else FRACASSO, se voltar no estado inicial e nao tiver mais jogadas
+        } else if(proibidos[0].block.length === jogadas.length) { 
+            sucessFail = false; 
+            console.log("FRACASSO");
+            break;
+        }
 
 
         //faz jogada 
