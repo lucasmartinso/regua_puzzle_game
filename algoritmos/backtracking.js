@@ -1,5 +1,4 @@
-export function backtracking(n) { 
-    let fichas = ['P','V',null,'V','P'];
+export function backtracking(n, fichas) { 
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     let custo = 0; 
     let profundidade = 0; 
@@ -27,7 +26,7 @@ export function backtracking(n) {
     while(sucessFail !== true && sucessFail !== false) { 
         //verifica se eh o estado final
         const indVazio = fichas.indexOf(null);
-        const somaSe = indVazio > Math.floor(n/2) ? 0 : 1; 
+        const somaSe = indVazio > Math.floor(n/2) ? 0 : 1; //se o espaco ta na metade pra frente faz apenas 2 comparacoes, se estiver antes disso faz 3 comparacoes
         const primeiroEstado = fichas[0] === null ? fichas[1] : fichas[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
         let teste = true;
         
@@ -71,6 +70,7 @@ export function backtracking(n) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     custo += 2;
+                    profundidade++;
                     break;
                 }
             }
@@ -86,6 +86,7 @@ export function backtracking(n) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     custo += 2;
+                    profundidade++;
                     break;
                 }
             }
@@ -101,6 +102,7 @@ export function backtracking(n) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     custo ++;
+                    profundidade++;
                     break;
                 }
             }
@@ -116,23 +118,25 @@ export function backtracking(n) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     custo ++;
+                    profundidade++;
                     break;
-                } else bt(caminho, fichas, custo); //backtracking se resultar em estado repetido tb
+                } else bt(caminho, fichas, custo, profundidade); //backtracking se resultar em estado repetido tb
             } 
             
-            else if(i==3) bt(caminho, fichas, custo); //backtracking, se nao da pra fazer nenhuma das anteriores
+            else if(i==3) bt(caminho, fichas, custo, profundidade); //backtracking, se nao da pra fazer nenhuma das anteriores
         }
-
-        //console.log(copiaFichas); 
-
         console.log("\n");
     }
+
+    console.log(`\nCUSTO DA OPERACAO: ${custo}`);
+    console.log(`\PROFUNDIDADE ALCANCADA: ${profundidade}`);
 }
 
-function bt(caminho, fichas, custo) { 
+function bt(caminho, fichas, custo, profundidade) { 
     console.log("BACKTRACKING");
     fichas = caminho.pop();
     custo += 3;
+    profundidade--;
 }
 
 function verificaRepeticaoEstados(caminho, fichas, indVazio) {
