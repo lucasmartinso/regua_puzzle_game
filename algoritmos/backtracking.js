@@ -1,5 +1,5 @@
-export function backtracking(n, fichas) { 
-    //let fichas = ['P','V',null,'V','P'];
+export function backtracking(n) { 
+    let fichas = ['P','V',null,'V','P'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     let custo = 0; 
     let profundidade = 0; 
@@ -27,11 +27,12 @@ export function backtracking(n, fichas) {
     while(sucessFail !== true && sucessFail !== false) { 
         //verifica se eh o estado final
         const indVazio = fichas.indexOf(null);
-        const somaSe = indVazio / (n/2) ? 0 : 1; 
+        const somaSe = indVazio > Math.floor(n/2) ? 0 : 1; 
         const primeiroEstado = fichas[0] === null ? fichas[1] : fichas[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
         let teste = true;
+        
         console.log("\nCOMPARACAO: ");
-        for(let i=0; i<fichas.length/2 + somaSe; i++) {
+        for(let i=0; i<Math.floor(fichas.length/2) + somaSe; i++) {
             if(fichas[i] !== null) {
                 console.log(`${primeiroEstado} == ${fichas[i]} ???`) 
                 if(primeiroEstado !== fichas[i]) { 
@@ -40,6 +41,7 @@ export function backtracking(n, fichas) {
                 }
             }
         }
+    
 
         if(teste) {
             sucessFail = true;
@@ -68,6 +70,7 @@ export function backtracking(n, fichas) {
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
+                    custo += 2;
                     break;
                 }
             }
@@ -82,6 +85,7 @@ export function backtracking(n, fichas) {
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
+                    custo += 2;
                     break;
                 }
             }
@@ -96,6 +100,7 @@ export function backtracking(n, fichas) {
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
+                    custo ++;
                     break;
                 }
             }
@@ -110,11 +115,12 @@ export function backtracking(n, fichas) {
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio)) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
+                    custo ++;
                     break;
-                } else bt(caminho, fichas); //backtracking se resultar em estado repetido tb
+                } else bt(caminho, fichas, custo); //backtracking se resultar em estado repetido tb
             } 
             
-            else if(i==3) bt(caminho, fichas); //backtracking, se nao da pra fazer nenhuma das anteriores
+            else if(i==3) bt(caminho, fichas, custo); //backtracking, se nao da pra fazer nenhuma das anteriores
         }
 
         //console.log(copiaFichas); 
@@ -123,9 +129,10 @@ export function backtracking(n, fichas) {
     }
 }
 
-function bt(caminho, fichas) { 
+function bt(caminho, fichas, custo) { 
     console.log("BACKTRACKING");
     fichas = caminho.pop();
+    custo += 3;
 }
 
 function verificaRepeticaoEstados(caminho, fichas, indVazio) {
