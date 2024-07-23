@@ -111,21 +111,21 @@ export function backtracking(n, fichas) {
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     break;
-                } 
+                } else bt(caminho, fichas); //backtracking se resultar em estado repetido tb
             } 
             
-            else { //backtracking, se nao da pra fazer nenhuma das anteriores
-                console.log("BACKTRACKING");
-                fichas = caminho.pop();
-            }
-            //console.log(copiaFichas);
+            else if(i==3) bt(caminho, fichas); //backtracking, se nao da pra fazer nenhuma das anteriores
         }
 
         //console.log(copiaFichas); 
 
-        custo++;
         console.log("\n");
     }
+}
+
+function bt(caminho, fichas) { 
+    console.log("BACKTRACKING");
+    fichas = caminho.pop();
 }
 
 function verificaRepeticaoEstados(caminho, fichas, indVazio) {
