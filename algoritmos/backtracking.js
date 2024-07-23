@@ -4,8 +4,7 @@ export function backtracking(n, fichas) {
     let profundidade = 0; 
     let sucessFail = undefined;
     const caminho = [[]];
-    const aberta = [[]]; //nos expandidos
-    const fechada = [[]]; //nos visitados
+    let expandidos = 0; //nos expandidos
     const estInicial = [[]]; 
 
     //define o estado inicial
@@ -13,14 +12,14 @@ export function backtracking(n, fichas) {
     for(let i=0; i<n; i++) { 
         estInicial[i] = fichas[i];
         caminho[0][i] = fichas[i];
-        aberta[0][i] = fichas[i];
-        fechada[0][i] = fichas[i];
     }
     //------------------ ALGORTIMO ------------------
 
     //ESTADO INICIAL: RANDOMICO
     //ESTADO FINAL: PECAS DE UM COR PARA UM LADO E PECAS DA OUTRA COR PARA O OUTRO - ignora o espaco vazio
     //ESTRATÉGIA DE CONTROLE: Pula para direita(PD), Pula para esquerda(PE), Anda para direita(AD), Anda para esquerda(AE)
+
+    console.time('TEMPO DE EXECUCAO'); //comeca a marcar o tempo
 
     const jogadas = ['PD','PE','AD','AE'];
     while(sucessFail !== true && sucessFail !== false) { 
@@ -71,6 +70,7 @@ export function backtracking(n, fichas) {
                     caminho.push(fichas);
                     custo += 2;
                     profundidade++;
+                    expandidos++;
                     break;
                 }
             }
@@ -87,6 +87,7 @@ export function backtracking(n, fichas) {
                     caminho.push(fichas);
                     custo += 2;
                     profundidade++;
+                    expandidos++;
                     break;
                 }
             }
@@ -103,6 +104,7 @@ export function backtracking(n, fichas) {
                     caminho.push(fichas);
                     custo ++;
                     profundidade++;
+                    expandidos++;
                     break;
                 }
             }
@@ -119,6 +121,7 @@ export function backtracking(n, fichas) {
                     caminho.push(fichas);
                     custo ++;
                     profundidade++;
+                    expandidos++;
                     break;
                 } else bt(caminho, fichas, custo, profundidade); //backtracking se resultar em estado repetido tb
             } 
@@ -129,7 +132,13 @@ export function backtracking(n, fichas) {
     }
 
     console.log(`\nCUSTO DA OPERACAO: ${custo}`);
-    console.log(`\PROFUNDIDADE ALCANCADA: ${profundidade}`);
+    console.log(`PROFUNDIDADE ALCANCADA: ${profundidade}`);
+    console.log(`NOS VISITADOS ${expandidos+1}, NOS EXPANDIDOS ${expandidos}`);
+    console.timeEnd('TEMPO DE EXECUCAO');
+    console.log("CAMINHO: ");
+    for(let i=0; i<caminho.length; i++) {
+        console.log(caminho[i],"-->");
+    }
 }
 
 function bt(caminho, fichas, custo, profundidade) { 
