@@ -1,15 +1,12 @@
 export function backtracking(n) { 
     let fichas = ['P','V','V',null,'P'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
-    let custo = 0; 
-    let profundidade = 0; 
+    let propriedades = { custo: 0, profundidade: 0, expandidos: 0, backCond: false };
     let sucessFail = undefined;
-    let expandidos = 0; //nos expandidos
     const caminho = [[]];
     const estInicial = []; 
     const proibidos = [{estado: [], block: []}]; //nao repetir a jogada que resultou em backtracking, add em um objeto cada estado e um vetor de blockPlays 
     const jogatinas = [];
-    let backCond = false;
     let j = 0;
 
     //define o estado inicial
@@ -76,15 +73,15 @@ export function backtracking(n) {
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio-2] = null;
 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!backCond || !proibidos[proibidos.length-1].block.includes(0))) {
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(0))) {
                     jogatinas.push(0);
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     proibidos.push({estado: fichas, block: []});
-                    custo += 2;
-                    profundidade++;
-                    expandidos++;
-                    backCond = false;
+                    propriedades.custo += 2;
+                    propriedades.expandidos++;
+                    propriedades.profundidade++;
+                    propriedades.backCond = false;
                     break;
                 }
             }
@@ -92,23 +89,20 @@ export function backtracking(n) {
             //tenta a segunda jogada
             else if(i==1 && indVazio<=n-3) { //so da pra fazer o salto a esquerda, se o espaco vazio estiver no max 2 posicoes da borda da direita, ou seja, n-3(antepenultima)
                 console.log("JOGADA 2");
-                //console.log(backCond);
-                //const backState = backCond ? verificaRepeticaoEstados(caminho,copiaFichas, indVazio) : false; //vai verificar se esta em estado de bt ou nn
-                //console.log(backState);
 
                 const auxTrocaPeca = copiaFichas[indVazio+2]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio+2] = null;
                 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!backCond || !proibidos[proibidos.length-1].block.includes(1))) { // && !proibidos[proibidos.length-1].block.includes(1)
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(1))) { // && !proibidos[proibidos.length-1].block.includes(1)
                     jogatinas.push(1);
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     proibidos.push({estado: fichas, block: [0]});
-                    custo += 2;
-                    profundidade++;
-                    expandidos++;
-                    backCond = false;
+                    propriedades.custo += 2;
+                    propriedades.expandidos++;
+                    propriedades.profundidade++;
+                    propriedades.backCond = false;
                     break;
                 }
             }
@@ -116,20 +110,20 @@ export function backtracking(n) {
             //tenta a terceira jogada
             else if(i==2 && indVazio>0) { //so da pra andar para esquerda se o espaco vazio nao for a borda esquerda
                 console.log("JOGADA 3");
-                //console.log(proibidos[proibidos.length-1].block.includes(2));
+
                 const auxTrocaPeca = copiaFichas[indVazio-1]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio-1] = null;
                 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!backCond || !proibidos[proibidos.length-1].block.includes(2))) {
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(2))) {
                     jogatinas.push(2);
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     proibidos.push({estado: fichas, block: [0,1]});
-                    custo ++;
-                    profundidade++;
-                    expandidos++;
-                    backCond = false;
+                    propriedades.custo ++;
+                    propriedades.expandidos++;
+                    propriedades.profundidade++;
+                    propriedades.backCond = false;
                     break;
                 }
             }
@@ -137,39 +131,32 @@ export function backtracking(n) {
             //tenta a quarta jogada
             else if(i==3 && indVazio<n-1) { //so da pra andar para direita se o espaco vazio nao for a borda direita
                 console.log("JOGADA 4");
-                //console.log(proibidos[proibidos.length-1].block.includes(3));
+
                 const auxTrocaPeca = copiaFichas[indVazio+1]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio+1] = null;
                 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!backCond || !proibidos[proibidos.length-1].block.includes(3))) {
+                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(3))) {
                     jogatinas.push(3);
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     proibidos.push({estado: fichas, block: [0,1,2]});
-                    custo ++;
-                    profundidade++;
-                    expandidos++;
-                    backCond = false;
+                    propriedades.custo ++;
+                    propriedades.expandidos++;
+                    propriedades.profundidade++;
+                    propriedades.backCond = false;
                     break;
-                } else {
-                    bt(caminho, fichas, custo, profundidade, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
-                    backCond = true;
-                }
+                } else bt(caminho, fichas, propriedades, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
             } 
             
-            else if(i==3) {
-                bt(caminho, fichas, custo, profundidade, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
-                backCond = true;
-            }
+            else if(i==3) bt(caminho, fichas, propriedades, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
         }
-        console.log(jogatinas);
         console.log("\n");
     }
 
-    console.log(`\nCUSTO DA OPERACAO: ${custo}`);
-    console.log(`PROFUNDIDADE ALCANCADA: ${profundidade}`);
-    console.log(`NOS VISITADOS ${expandidos+1}, NOS EXPANDIDOS ${expandidos}`);
+    console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
+    console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
+    console.log(`NOS VISITADOS ${propriedades.expandidos+1}, NOS EXPANDIDOS ${propriedades.expandidos}`);
     console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: 1`);
     console.timeEnd('TEMPO DE EXECUCAO');
     console.log("CAMINHO: ");
@@ -178,15 +165,15 @@ export function backtracking(n) {
     }
 }
 
-function bt(caminho, fichas, custo, profundidade, jogatinas, proibidos) { 
+function bt(caminho, fichas, propriedades, jogatinas, proibidos) { 
     console.log("BACKTRACKING");
     caminho.pop();
     proibidos.pop();
     const indJogada = jogatinas.pop(); //jogada anterior que caiu no estado que foi um backtracking
     proibidos[proibidos.length-1].block.push(indJogada);
-    console.log(proibidos[proibidos.length-1]);
-    custo += 3;
-    profundidade--;
+    propriedades.custo += 3;
+    propriedades.profundidade--;
+    propriedades.backCond = true;
 
     for(let k=0; k<fichas.length; k++) { 
         fichas[k] = caminho[caminho.length-1][k];
