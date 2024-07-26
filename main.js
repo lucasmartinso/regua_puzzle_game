@@ -1,4 +1,13 @@
 import { backtracking } from "./algoritmos/backtracking.js";
+import { profundidade } from "./algoritmos/profundidade.js";
+
+function main(n) { 
+    const tamSistema = 2*n + 1; //n blocos pretos e n blocos brancos + um espaço vazio
+    const pecas = [];
+
+    embaralhaSistema(tamSistema, pecas);
+    backtracking(tamSistema, pecas);
+}
 
 function embaralhaSistema(n, pecas) { 
     //primeiro aleatoriza a posicao que vai ficar vazia no vetor
@@ -18,15 +27,6 @@ function embaralhaSistema(n, pecas) {
             }
         }
     }
-}
-
-//n blocos pretos e n blocos brancos + um espaço vazio
-function main(n) { 
-    const tamSistema = 2*n + 1; 
-    const pecas = [];
-
-    embaralhaSistema(tamSistema, pecas);
-    backtracking(tamSistema);
 }
 
 main(2);
