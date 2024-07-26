@@ -1,5 +1,4 @@
-export function backtracking(n) { 
-    let fichas = ['P','V','V',null,'P'];
+export function backtracking(n, fichas) { 
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     let propriedades = { custo: 0, profundidade: 0, expandidos: 0, backCond: false };
     let sucessFail = undefined;
@@ -7,7 +6,6 @@ export function backtracking(n) {
     const estInicial = []; 
     const proibidos = [{estado: [], block: []}]; //nao repetir a jogada que resultou em backtracking, add em um objeto cada estado e um vetor de blockPlays 
     const jogatinas = [];
-    let j = 0;
 
     //define o estado inicial
     console.log(`ESTADO INICIAL: ${fichas}\n`);
@@ -32,10 +30,10 @@ export function backtracking(n) {
         const primeiroEstado = fichas[0] === null ? fichas[1] : fichas[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
         let teste = true;
         
-        //console.log("\nCOMPARACAO: ");
+        console.log("\nCOMPARACAO: ");
         for(let i=0; i<Math.floor(fichas.length/2) + somaSe; i++) {
             if(fichas[i] !== null) {
-                //console.log(`${primeiroEstado} == ${fichas[i]} ???`) 
+                console.log(`${primeiroEstado} == ${fichas[i]} ???`) 
                 if(primeiroEstado !== fichas[i]) { 
                     teste = false;
                     break;
@@ -74,6 +72,7 @@ export function backtracking(n) {
                 copiaFichas[indVazio-2] = null;
 
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(0))) {
+                    // attJogada(jogatinas, 0, fichas, copiaFichas, caminho, proibidos, [], 2, propriedades);
                     jogatinas.push(0);
                     fichas = copiaFichas;
                     caminho.push(fichas);
@@ -154,15 +153,15 @@ export function backtracking(n) {
         console.log("\n");
     }
 
+    console.log("CAMINHO: ");
+    for(let i=0; i<caminho.length; i++) {
+        console.log(caminho[i],"-->");
+    }
     console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
     console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
     console.log(`NOS VISITADOS ${propriedades.expandidos+1}, NOS EXPANDIDOS ${propriedades.expandidos}`);
     console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: 1`);
     console.timeEnd('TEMPO DE EXECUCAO');
-    console.log("CAMINHO: ");
-    for(let i=0; i<caminho.length; i++) {
-        console.log(caminho[i],"-->");
-    }
 }
 
 function bt(caminho, fichas, propriedades, jogatinas, proibidos) { 
@@ -179,6 +178,17 @@ function bt(caminho, fichas, propriedades, jogatinas, proibidos) {
         fichas[k] = caminho[caminho.length-1][k];
     }
 }
+
+// function attJogada(jogatinas, jogada, fichas, copiaFichas, caminho, proibidos, blocks, custo, propriedades) { 
+//     jogatinas.push(jogada);
+//     fichas = copiaFichas;
+//     caminho.push(fichas);
+//     proibidos.push({estado: fichas, block: blocks});
+//     propriedades.custo += custo;
+//     propriedades.expandidos++;
+//     propriedades.profundidade++;
+//     propriedades.backCond = false;
+// }
 
 function verifyBackState(proibidos, fichas, n) { 
     let ind = -1;
