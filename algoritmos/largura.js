@@ -15,6 +15,7 @@ export function largura(n, fichas) {
     //ESTADO FINAL: PECAS DE UM COR PARA UM LADO E PECAS DA OUTRA COR PARA O OUTRO - ignora o espaco vazio
     //ESTRATÉGIA DE CONTROLE: Pula para direita(PD), Pula para esquerda(PE), Anda para direita(AD), Anda para esquerda(AE)
 
+    const jogadas = ['PD','PE','AD','AE'];
     while(sucessFail !== true || sucessFail !== false) { 
         if(!abertos.length) { 
             console.log("FRACASSO"); 
@@ -46,7 +47,9 @@ export function largura(n, fichas) {
                 console.log("SUCESSO");
                 break;
             } else { 
-
+                for(let i=0; i<jogadas.length; i++) {
+                    
+                }
             }
         }
     }

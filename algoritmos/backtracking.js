@@ -15,6 +15,30 @@ export function backtracking(n, fichas) {
         caminho[0][i] = fichas[i];
         proibidos[0].estado[i] = fichas[i];
     }
+
+    //verifica se ja esta organizado
+    const indVazio = fichas.indexOf(null);
+    const somaSe = indVazio > Math.floor(n/2) ? 0 : 1; //se o espaco ta na metade pra frente faz apenas 2 comparacoes, se estiver antes disso faz 3 comparacoes
+    const primeiroEstado = fichas[0] === null ? fichas[1] : fichas[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
+    let teste = true;
+    
+    console.log("\nCOMPARACAO: ");
+    for(let i=0; i<Math.floor(fichas.length/2) + somaSe; i++) {
+        if(fichas[i] !== null) {
+            console.log(`${primeiroEstado} == ${fichas[i]} ???`) 
+            if(primeiroEstado !== fichas[i]) { 
+                teste = false;
+                break;
+            }
+        }
+    }
+
+    if(teste) {
+        sucessFail = true;
+        console.log("SUCESSO");
+    }
+
+
     //------------------ ALGORTIMO ------------------
 
     //ESTADO INICIAL: RANDOMICO
@@ -24,36 +48,7 @@ export function backtracking(n, fichas) {
     console.time('TEMPO DE EXECUCAO'); //comeca a marcar o tempo
 
     const jogadas = ['PD','PE','AD','AE'];
-    while(sucessFail !== true && sucessFail !== false) { // j<=10
-        //verifica se eh o estado final
-        const indVazio = fichas.indexOf(null);
-        const somaSe = indVazio > Math.floor(n/2) ? 0 : 1; //se o espaco ta na metade pra frente faz apenas 2 comparacoes, se estiver antes disso faz 3 comparacoes
-        const primeiroEstado = fichas[0] === null ? fichas[1] : fichas[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
-        let teste = true;
-        
-        console.log("\nCOMPARACAO: ");
-        for(let i=0; i<Math.floor(fichas.length/2) + somaSe; i++) {
-            if(fichas[i] !== null) {
-                console.log(`${primeiroEstado} == ${fichas[i]} ???`) 
-                if(primeiroEstado !== fichas[i]) { 
-                    teste = false;
-                    break;
-                }
-            }
-        }
-    
-
-        if(teste) {
-            sucessFail = true;
-            console.log("SUCESSO");
-            break;
-        } else if(proibidos[0].block.length === jogadas.length) { 
-            sucessFail = false; 
-            console.log("FRACASSO");
-            break;
-        }
-
-
+    while(sucessFail !== true && sucessFail !== false) {
         //faz jogada 
         for(let i=0; i<jogadas.length; i++) {
             const indVazio = fichas.indexOf(null); //indice do espaco vazio
@@ -151,18 +146,48 @@ export function backtracking(n, fichas) {
             
             else if(i==3) bt(caminho, fichas, propriedades, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
         }
+
+        //verifica se eh o estado final
+        const indVazio = fichas.indexOf(null);
+        const somaSe = indVazio > Math.floor(n/2) ? 0 : 1; //se o espaco ta na metade pra frente faz apenas 2 comparacoes, se estiver antes disso faz 3 comparacoes
+        const primeiroEstado = fichas[0] === null ? fichas[1] : fichas[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
+        let teste = true;
+        
+        console.log("\nCOMPARACAO: ");
+        for(let i=0; i<Math.floor(fichas.length/2) + somaSe; i++) {
+            if(fichas[i] !== null) {
+                console.log(`${primeiroEstado} == ${fichas[i]} ???`) 
+                if(primeiroEstado !== fichas[i]) { 
+                    teste = false;
+                    break;
+                }
+            }
+        }
+    
+
+        if(teste) {
+            sucessFail = true;
+            console.log("SUCESSO");
+            break;
+        } else if(!jogatinas.length) {
+            sucessFail = false; 
+            console.log("FRACASSO");
+            break;
+        }
         console.log("\n");
     }
 
-    console.log("CAMINHO: ");
-    for(let i=0; i<caminho.length; i++) {
-        console.log(caminho[i],"-->");
+    if(sucessFail) {
+        console.log("CAMINHO: ");
+        for(let i=0; i<caminho.length; i++) {
+            console.log(caminho[i],"-->");
+        }
+        console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
+        console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
+        console.log(`NOS VISITADOS ${propriedades.expandidos+1}, NOS EXPANDIDOS ${propriedades.expandidos}`);
+        console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: 1`);
+        console.timeEnd('TEMPO DE EXECUCAO');
     }
-    console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
-    console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
-    console.log(`NOS VISITADOS ${propriedades.expandidos+1}, NOS EXPANDIDOS ${propriedades.expandidos}`);
-    console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: 1`);
-    console.timeEnd('TEMPO DE EXECUCAO');
 }
 
 function bt(caminho, fichas, propriedades, jogatinas, proibidos) { 
