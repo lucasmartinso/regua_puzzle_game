@@ -1,12 +1,19 @@
 //COMPORTAMENTO DE FILA
 export function largura(n, fichas) { 
+    //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const abertos = [[]]; //vai sendo explorado como uma fila
     const fechados = [[]];
     let sucessFail = undefined;
 
     for(let i=0; i<n; i++) { 
-        abertos[0][i] = fichas[i];
+        abertos[0][i] = fichas[i]; //primeiro estado que vai ser explorado
     }
+
+     //------------------ ALGORTIMO ------------------
+
+    //ESTADO INICIAL: RANDOMICO
+    //ESTADO FINAL: PECAS DE UM COR PARA UM LADO E PECAS DA OUTRA COR PARA O OUTRO - ignora o espaco vazio
+    //ESTRATÉGIA DE CONTROLE: Pula para direita(PD), Pula para esquerda(PE), Anda para direita(AD), Anda para esquerda(AE)
 
     while(sucessFail !== true || sucessFail !== false) { 
         if(!abertos.length) { 
@@ -32,6 +39,14 @@ export function largura(n, fichas) {
                         break;
                     }
                 }
+            }
+
+            if(teste) {
+                sucessFail = true;
+                console.log("SUCESSO");
+                break;
+            } else { 
+
             }
         }
     }
