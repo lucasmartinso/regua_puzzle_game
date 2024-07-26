@@ -216,23 +216,6 @@ function bt(caminho, fichas, propriedades, jogatinas, proibidos) {
 //     propriedades.backCond = false;
 // }
 
-function verifyBackState(proibidos, fichas, n) { 
-    let ind = -1;
-
-    for(let i=proibidos.length-1; i>=0; i--) { 
-        ind = i;
-        for(let j=0; j<n; j++) {
-            if(proibidos[i].estado[j] !== fichas[j]) {
-                ind = -1;
-                break;
-            }  
-        }
-        if(ind!==-1) return ind; //eh um estado de backtracking
-    }
-
-    return ind; //nao eh um estado de backtracking
-}
-
 function verificaRepeticaoEstados(caminho, fichas, indVazio) {
     console.log(caminho);
     console.log(fichas);

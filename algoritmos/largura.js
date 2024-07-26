@@ -1,5 +1,6 @@
 //COMPORTAMENTO DE FILA
-export function largura(n, fichas) { 
+export function largura(n) { 
+    let fichas = ['P','V',null,'V','P'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const abertos = [[]]; //vai sendo explorado como uma fila
     const fechados = [[]];
@@ -9,14 +10,15 @@ export function largura(n, fichas) {
         abertos[0][i] = fichas[i]; //primeiro estado que vai ser explorado
     }
 
-     //------------------ ALGORTIMO ------------------
+    //------------------ ALGORTIMO ------------------
 
     //ESTADO INICIAL: RANDOMICO
     //ESTADO FINAL: PECAS DE UM COR PARA UM LADO E PECAS DA OUTRA COR PARA O OUTRO - ignora o espaco vazio
     //ESTRATÉGIA DE CONTROLE: Pula para direita(PD), Pula para esquerda(PE), Anda para direita(AD), Anda para esquerda(AE)
 
     const jogadas = ['PD','PE','AD','AE'];
-    while(sucessFail !== true || sucessFail !== false) { 
+    let j = 0;
+    while(j<1) { //
         if(!abertos.length) { 
             console.log("FRACASSO"); 
             sucessFail = false;
@@ -47,10 +49,37 @@ export function largura(n, fichas) {
                 console.log("SUCESSO");
                 break;
             } else { 
-                for(let i=0; i<jogadas.length; i++) {
-                    
+                //tenta primeira jogada
+                if(indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
+                    console.log("JOGADA 1");
+
+                    const copiaFichas = []; 
+                    for(let j=0; j<fichas.length; j++) { 
+                        copiaFichas[j] = fichas[j];
+                    }
+
+                    const auxTrocaPeca = copiaFichas[indVazio-2]; 
+                    copiaFichas[indVazio] = auxTrocaPeca; 
+                    copiaFichas[indVazio-2] = null;
+
+                    if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(0))) {
+                        jogatinas.push(0);
+                        fichas = copiaFichas;
+                        caminho.push(fichas);
+                        proibidos.push({estado: fichas, block: []});
+                        propriedades.custo += 2;
+                        propriedades.expandidos++;
+                        propriedades.profundidade++;
+                        propriedades.backCond = false;
+                        break;
+                    }
                 }
             }
         }
+        j++;
     }
+
+
+
+    console.log("ACABOU AQUI");
 }

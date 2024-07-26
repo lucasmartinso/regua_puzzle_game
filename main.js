@@ -29,4 +29,4 @@ function embaralhaSistema(n, pecas) {
     }
 }
 
-main(5);
+main(2);
