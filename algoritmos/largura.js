@@ -2,12 +2,12 @@
 export function largura(n) { 
     let fichas = ['P','V',null,'V','P'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
-    const abertos = [[]]; //vai sendo explorado como uma fila
+    const abertos = [{estado: [], pai: -1}]; //vai sendo explorado como uma fila
     const fechados = [];
     let sucessFail = undefined;
 
     for(let i=0; i<n; i++) { 
-        abertos[0][i] = fichas[i]; //primeiro estado que vai ser explorado
+        abertos[0].estado[i] = fichas[i]; //primeiro estado que vai ser explorado
     }
 
     //------------------ ALGORTIMO ------------------
@@ -18,17 +18,16 @@ export function largura(n) {
 
     const jogadas = ['PD','PE','AD','AE'];
     let j = 0;
-    while(j<=0) { //
+    while(j<=3) { //
         if(!abertos.length) { 
             console.log("FRACASSO"); 
             sucessFail = false;
             break;
         } else { 
             const primeiroDaLista = abertos.shift(); //fila, firt in fist out
-            if(!fechados.length) fechados.push({estado: primeiroDaLista, pai: -1});
+            if(!fechados.length) fechados.push(primeiroDaLista);
             else {
-                const idPai = fechados.length-1;
-                fechados.push({ estado: primeiroDaLista, pai: idPai });
+                fechados.push(primeiroDaLista);
             }
 
             //verifica se eh o estado final
@@ -55,8 +54,6 @@ export function largura(n) {
             } else { 
                 //tenta primeira jogada
                 if(indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
-                    console.log("JOGADA 1");
-
                     const copiaFichas = []; 
                     for(let j=0; j<fichas.length; j++) { 
                         copiaFichas[j] = fechados[fechados.length-1].estado[j];
@@ -66,14 +63,12 @@ export function largura(n) {
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio-2] = null;
 
-                    if(!verificaRepeticaoEstados(fechados,copiaFichas, indVazio)) {
-                        abertos.push(copiaFichas);
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
+                        abertos.push({estado: copiaFichas, pai: fechados.length-1});
                     }
                 }
 
                 if(indVazio<=n-3) { //so da pra fazer o salto a esquerda, se o espaco vazio estiver no max 2 posicoes da borda da direita, ou seja, n-3(antepenultima)
-                    console.log("JOGADA 2");
-
                     const copiaFichas = []; 
                     for(let j=0; j<fichas.length; j++) { 
                         copiaFichas[j] = fechados[fechados.length-1].estado[j];
@@ -83,15 +78,48 @@ export function largura(n) {
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio+2] = null;
                     
-                    if(!verificaRepeticaoEstados(fechados, copiaFichas, indVazio)) {
-                        abertos.push(copiaFichas);
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
+                        abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                    }
+                }
+
+                if(indVazio>0) { //so da pra andar para esquerda se o espaco vazio nao for a borda esquerda
+                    const copiaFichas = []; 
+                    for(let j=0; j<fichas.length; j++) { 
+                        copiaFichas[j] = fechados[fechados.length-1].estado[j];
+                    }
+    
+                    const auxTrocaPeca = copiaFichas[indVazio-1]; 
+                    copiaFichas[indVazio] = auxTrocaPeca; 
+                    copiaFichas[indVazio-1] = null;
+                    
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
+                        abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                    }
+                }
+    
+                //tenta a quarta jogada
+                if(indVazio<n-1) { //so da pra andar para direita se o espaco vazio nao for a borda direita
+                    const copiaFichas = []; 
+                    for(let j=0; j<fichas.length; j++) { 
+                        copiaFichas[j] = fechados[fechados.length-1].estado[j];
+                    }
+    
+                    const auxTrocaPeca = copiaFichas[indVazio+1]; 
+                    copiaFichas[indVazio] = auxTrocaPeca; 
+                    copiaFichas[indVazio+1] = null;
+                    
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
+                        abertos.push({estado: copiaFichas, pai: fechados.length-1});
                     }
                 }
             }
         }
         //FALTA A JOGADA 3 E 4
         j++;
+        console.log("FECHADOS: ");
         console.log(fechados);
+        console.log("ABERTOS: ");
         console.log(abertos);
     }
 
@@ -100,20 +128,26 @@ export function largura(n) {
     console.log("ACABOU AQUI");
 }
 
+function verificaRepeticaoEstados(fechados, abertos, fichas, indVazio) {
+    for(let i=0; i<fechados.length; i++) { 
+        const repetiuFechado = fechados[i].estado.every((value, index) => value === fichas[index]);
+
+        if(repetiuFechado) return true; //achou um estado repetido
+    }
+
+    for(let i=0; i<abertos.length; i++) { 
+        const repetiuAberto = abertos[i].estado.every((value, index) => value === fichas[index]);
+
+        if(repetiuAberto) return true; //achou um estado repetido
+    }
+
+    return false; //passou por todos estados do caminho e nenhum deles era repetido
+}
+
 function attJogada(jogatinas, jogada, propriedades, custo) { 
     jogatinas.push(jogada);
     propriedades.custo += custo;
     propriedades.expandidos++;
     propriedades.profundidade++;
     propriedades.backCond = false;
-}
-
-function verificaRepeticaoEstados(fechados, fichas, indVazio) {
-    for(let i=0; i<fechados.length; i++) { 
-        const repetiu = fechados[i].estado.every((value, index) => value === fichas[index]);
-
-        if(repetiu) return true; //achou um estado repetido
-    }
-
-    return false; //passou por todos estados do caminho e nenhum deles era repetido
 }
