@@ -7,8 +7,8 @@ function main(n) {
     const pecas = [];
 
     embaralhaSistema(tamSistema, pecas);
-    backtracking(tamSistema, pecas);
-    //largura(tamSistema);
+    //backtracking(tamSistema, pecas);
+    largura(tamSistema);
 
 }
 

@@ -18,7 +18,7 @@ export function largura(n) {
 
     const jogadas = ['PD','PE','AD','AE'];
     let j = 0;
-    while(j<0) { //
+    while(j<=0) { //
         if(!abertos.length) { 
             console.log("FRACASSO"); 
             sucessFail = false;
@@ -32,16 +32,16 @@ export function largura(n) {
             }
 
             //verifica se eh o estado final
-            const indVazio = abertos[abertos.length-1].indexOf(null);
+            const indVazio = fechados[fechados.length-1].estado.indexOf(null);
             const somaSe = indVazio > Math.floor(n/2) ? 0 : 1; //se o espaco ta na metade pra frente faz apenas 2 comparacoes, se estiver antes disso faz 3 comparacoes
-            const primeiroEstado = abertos[abertos.length-1][0] === null ? abertos[abertos.length-1][1] : abertos[abertos.length-1][0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
+            const primeiroEstado = fechados[fechados.length-1].estado[0] === null ? fechados[fechados.length-1].estado[1] : fechados[fechados.length-1].estado[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
             let teste = true;
             
             console.log("\nCOMPARACAO: ");
             for(let i=0; i<Math.floor(n/2) + somaSe; i++) {
-                if(abertos[abertos.length-1][i] !== null) {
-                    console.log(`${primeiroEstado} == ${abertos[abertos.length-1][i]} ???`) 
-                    if(primeiroEstado !== abertos[abertos.length-1][i]) { 
+                if(fechados[fechados.length-1].estado[i] !== null) {
+                    console.log(`${primeiroEstado} == ${fechados[fechados.length-1].estado[i]} ???`) 
+                    if(primeiroEstado !== fechados[fechados.length-1].estado[i]) { 
                         teste = false;
                         break;
                     }
@@ -59,28 +59,40 @@ export function largura(n) {
 
                     const copiaFichas = []; 
                     for(let j=0; j<fichas.length; j++) { 
-                        copiaFichas[j] = fichas[j];
+                        copiaFichas[j] = fechados[fechados.length-1].estado[j];
                     }
 
                     const auxTrocaPeca = copiaFichas[indVazio-2]; 
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio-2] = null;
 
-                    if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(0))) {
-                        jogatinas.push(0);
-                        fichas = copiaFichas;
-                        caminho.push(fichas);
-                        proibidos.push({estado: fichas, block: []});
-                        propriedades.custo += 2;
-                        propriedades.expandidos++;
-                        propriedades.profundidade++;
-                        propriedades.backCond = false;
-                        break;
+                    if(!verificaRepeticaoEstados(fechados,copiaFichas, indVazio)) {
+                        abertos.push(copiaFichas);
+                    }
+                }
+
+                if(indVazio<=n-3) { //so da pra fazer o salto a esquerda, se o espaco vazio estiver no max 2 posicoes da borda da direita, ou seja, n-3(antepenultima)
+                    console.log("JOGADA 2");
+
+                    const copiaFichas = []; 
+                    for(let j=0; j<fichas.length; j++) { 
+                        copiaFichas[j] = fechados[fechados.length-1].estado[j];
+                    }
+    
+                    const auxTrocaPeca = copiaFichas[indVazio+2]; 
+                    copiaFichas[indVazio] = auxTrocaPeca; 
+                    copiaFichas[indVazio+2] = null;
+                    
+                    if(!verificaRepeticaoEstados(fechados, copiaFichas, indVazio)) {
+                        abertos.push(copiaFichas);
                     }
                 }
             }
         }
+        //FALTA A JOGADA 3 E 4
         j++;
+        console.log(fechados);
+        console.log(abertos);
     }
 
 
@@ -88,11 +100,17 @@ export function largura(n) {
     console.log("ACABOU AQUI");
 }
 
-function verificaRepeticaoEstados(caminho, fichas, indVazio) {
-    console.log(caminho);
-    console.log(fichas);
-    for(let i=0; i<caminho.length; i++) { 
-        const repetiu = caminho[i].every((value, index) => value === fichas[index]);
+function attJogada(jogatinas, jogada, propriedades, custo) { 
+    jogatinas.push(jogada);
+    propriedades.custo += custo;
+    propriedades.expandidos++;
+    propriedades.profundidade++;
+    propriedades.backCond = false;
+}
+
+function verificaRepeticaoEstados(fechados, fichas, indVazio) {
+    for(let i=0; i<fechados.length; i++) { 
+        const repetiu = fechados[i].estado.every((value, index) => value === fichas[index]);
 
         if(repetiu) return true; //achou um estado repetido
     }
