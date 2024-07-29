@@ -1,6 +1,6 @@
 //COMPORTAMENTO DE FILA
 export function largura(n) { 
-    let fichas = ['P','V',null,'V','P'];
+    let fichas = ['P','V','V',null,'P'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const abertos = [{estado: [], pai: -1}]; //vai sendo explorado como uma fila
     const fechados = [];
@@ -133,6 +133,7 @@ export function largura(n) {
         while(pais !== -1) { 
             caminho.unshift(fechados[pais]);
             pais = fechados[pais].pai;
+            propriedades.profundidade++;
         }
 
         console.log("CAMINHO: ");
@@ -142,7 +143,7 @@ export function largura(n) {
         console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
         console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
         console.log(`NOS VISITADOS ${propriedades.explorados}, NOS EXPANDIDOS ${propriedades.expandidos}`);
-        console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: 1`);
+        console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: ${propriedades.expandidos/propriedades.explorados}`);
         console.timeEnd('TEMPO DE EXECUCAO');
     }
 }
