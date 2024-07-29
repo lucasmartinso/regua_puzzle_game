@@ -4,6 +4,7 @@ export function largura(n) {
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const abertos = [{estado: [], pai: -1}]; //vai sendo explorado como uma fila
     const fechados = [];
+    let propriedades = { custo: 0, profundidade: 0, expandidos: 1, explorados: 0};
     let sucessFail = undefined;
 
     for(let i=0; i<n; i++) { 
@@ -16,15 +17,18 @@ export function largura(n) {
     //ESTADO FINAL: PECAS DE UM COR PARA UM LADO E PECAS DA OUTRA COR PARA O OUTRO - ignora o espaco vazio
     //ESTRATÉGIA DE CONTROLE: Pula para direita(PD), Pula para esquerda(PE), Anda para direita(AD), Anda para esquerda(AE)
 
+    console.time('TEMPO DE EXECUCAO'); //comeca a marcar o tempo
+
     const jogadas = ['PD','PE','AD','AE'];
-    let j = 0;
-    while(j<=3) { //
+    while(sucessFail !== true && sucessFail !== false) { //
         if(!abertos.length) { 
             console.log("FRACASSO"); 
             sucessFail = false;
             break;
         } else { 
             const primeiroDaLista = abertos.shift(); //fila, firt in fist out
+            propriedades.explorados++;
+
             if(!fechados.length) fechados.push(primeiroDaLista);
             else {
                 fechados.push(primeiroDaLista);
@@ -57,6 +61,7 @@ export function largura(n) {
                     const copiaFichas = []; 
                     for(let j=0; j<fichas.length; j++) { 
                         copiaFichas[j] = fechados[fechados.length-1].estado[j];
+                        attJogada(propriedades, 2);
                     }
 
                     const auxTrocaPeca = copiaFichas[indVazio-2]; 
@@ -65,6 +70,7 @@ export function largura(n) {
 
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
                         abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                        attJogada(propriedades, 2);
                     }
                 }
 
@@ -80,6 +86,7 @@ export function largura(n) {
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
                         abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                        attJogada(propriedades, 1);
                     }
                 }
 
@@ -95,6 +102,7 @@ export function largura(n) {
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
                         abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                        attJogada(propriedades, 1);
                     }
                 }
     
@@ -115,17 +123,28 @@ export function largura(n) {
                 }
             }
         }
-        //FALTA A JOGADA 3 E 4
-        j++;
-        console.log("FECHADOS: ");
-        console.log(fechados);
-        console.log("ABERTOS: ");
-        console.log(abertos);
     }
 
+    if(sucessFail) {
+        const caminho = [];
 
+        let pais = fechados[fechados.length-1].pai;
+        caminho.unshift(fechados[fechados.length-1]);
+        while(pais !== -1) { 
+            caminho.unshift(fechados[pais]);
+            pais = fechados[pais].pai;
+        }
 
-    console.log("ACABOU AQUI");
+        console.log("CAMINHO: ");
+        for(let i=0; i<caminho.length; i++) { 
+            console.log(caminho[i],"-->");
+        }
+        console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
+        console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
+        console.log(`NOS VISITADOS ${propriedades.explorados}, NOS EXPANDIDOS ${propriedades.expandidos}`);
+        console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: 1`);
+        console.timeEnd('TEMPO DE EXECUCAO');
+    }
 }
 
 function verificaRepeticaoEstados(fechados, abertos, fichas, indVazio) {
@@ -144,10 +163,7 @@ function verificaRepeticaoEstados(fechados, abertos, fichas, indVazio) {
     return false; //passou por todos estados do caminho e nenhum deles era repetido
 }
 
-function attJogada(jogatinas, jogada, propriedades, custo) { 
-    jogatinas.push(jogada);
+function attJogada(propriedades, custo) { 
     propriedades.custo += custo;
     propriedades.expandidos++;
-    propriedades.profundidade++;
-    propriedades.backCond = false;
 }
