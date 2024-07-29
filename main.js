@@ -1,5 +1,6 @@
 import { backtracking } from "./algoritmos/backtracking.js";
 import { profundidade } from "./algoritmos/profundidade.js";
+import { largura } from "./algoritmos/largura.js";
 
 function main(n) { 
     const tamSistema = 2*n + 1; //n blocos pretos e n blocos brancos + um espaço vazio
@@ -7,6 +8,8 @@ function main(n) {
 
     embaralhaSistema(tamSistema, pecas);
     backtracking(tamSistema, pecas);
+    //largura(tamSistema);
+
 }
 
 function embaralhaSistema(n, pecas) { 

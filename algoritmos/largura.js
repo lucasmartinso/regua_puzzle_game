@@ -3,7 +3,7 @@ export function largura(n) {
     let fichas = ['P','V',null,'V','P'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const abertos = [[]]; //vai sendo explorado como uma fila
-    const fechados = [[]];
+    const fechados = [];
     let sucessFail = undefined;
 
     for(let i=0; i<n; i++) { 
@@ -18,14 +18,18 @@ export function largura(n) {
 
     const jogadas = ['PD','PE','AD','AE'];
     let j = 0;
-    while(j<1) { //
+    while(j<0) { //
         if(!abertos.length) { 
             console.log("FRACASSO"); 
             sucessFail = false;
             break;
         } else { 
             const primeiroDaLista = abertos.shift(); //fila, firt in fist out
-            fechados.push(primeiroDaLista);
+            if(!fechados.length) fechados.push({estado: primeiroDaLista, pai: -1});
+            else {
+                const idPai = fechados.length-1;
+                fechados.push({ estado: primeiroDaLista, pai: idPai });
+            }
 
             //verifica se eh o estado final
             const indVazio = abertos[abertos.length-1].indexOf(null);
@@ -82,4 +86,16 @@ export function largura(n) {
 
 
     console.log("ACABOU AQUI");
+}
+
+function verificaRepeticaoEstados(caminho, fichas, indVazio) {
+    console.log(caminho);
+    console.log(fichas);
+    for(let i=0; i<caminho.length; i++) { 
+        const repetiu = caminho[i].every((value, index) => value === fichas[index]);
+
+        if(repetiu) return true; //achou um estado repetido
+    }
+
+    return false; //passou por todos estados do caminho e nenhum deles era repetido
 }

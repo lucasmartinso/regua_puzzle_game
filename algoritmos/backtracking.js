@@ -1,5 +1,6 @@
 //concertar o fracasso, pq se ele voltar ao estado inicial ja eh fracasso, nn precisa fzr mais um monte de jogadas
 export function backtracking(n, fichas) { 
+    //let fichas = ['P','V','V',null,'P'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     let propriedades = { custo: 0, profundidade: 0, expandidos: 0, backCond: false };
     let sucessFail = undefined;
@@ -68,15 +69,10 @@ export function backtracking(n, fichas) {
                 copiaFichas[indVazio-2] = null;
 
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(0))) {
-                    // attJogada(jogatinas, 0, fichas, copiaFichas, caminho, proibidos, [], 2, propriedades);
-                    jogatinas.push(0);
+                    attJogada(jogatinas, 0, propriedades, 2);
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     proibidos.push({estado: fichas, block: []});
-                    propriedades.custo += 2;
-                    propriedades.expandidos++;
-                    propriedades.profundidade++;
-                    propriedades.backCond = false;
                     break;
                 }
             }
@@ -90,14 +86,10 @@ export function backtracking(n, fichas) {
                 copiaFichas[indVazio+2] = null;
                 
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(1))) { // && !proibidos[proibidos.length-1].block.includes(1)
-                    jogatinas.push(1);
+                    attJogada(jogatinas, 1, propriedades, 2);
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     proibidos.push({estado: fichas, block: [0]});
-                    propriedades.custo += 2;
-                    propriedades.expandidos++;
-                    propriedades.profundidade++;
-                    propriedades.backCond = false;
                     break;
                 }
             }
@@ -111,14 +103,10 @@ export function backtracking(n, fichas) {
                 copiaFichas[indVazio-1] = null;
                 
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(2))) {
-                    jogatinas.push(2);
+                    attJogada(jogatinas, 2, propriedades, 1);
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     proibidos.push({estado: fichas, block: [0,1]});
-                    propriedades.custo ++;
-                    propriedades.expandidos++;
-                    propriedades.profundidade++;
-                    propriedades.backCond = false;
                     break;
                 }
             }
@@ -132,14 +120,10 @@ export function backtracking(n, fichas) {
                 copiaFichas[indVazio+1] = null;
                 
                 if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(3))) {
-                    jogatinas.push(3);
+                    attJogada(jogatinas, 3, propriedades, 1);
                     fichas = copiaFichas;
                     caminho.push(fichas);
                     proibidos.push({estado: fichas, block: [0,1,2]});
-                    propriedades.custo ++;
-                    propriedades.expandidos++;
-                    propriedades.profundidade++;
-                    propriedades.backCond = false;
                     break;
                 } else bt(caminho, fichas, propriedades, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
             } 
@@ -187,6 +171,7 @@ export function backtracking(n, fichas) {
         console.log(`NOS VISITADOS ${propriedades.expandidos+1}, NOS EXPANDIDOS ${propriedades.expandidos}`);
         console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: 1`);
         console.timeEnd('TEMPO DE EXECUCAO');
+        console.log(jogatinas);
     }
 }
 
@@ -205,16 +190,13 @@ function bt(caminho, fichas, propriedades, jogatinas, proibidos) {
     }
 }
 
-// function attJogada(jogatinas, jogada, fichas, copiaFichas, caminho, proibidos, blocks, custo, propriedades) { 
-//     jogatinas.push(jogada);
-//     fichas = copiaFichas;
-//     caminho.push(fichas);
-//     proibidos.push({estado: fichas, block: blocks});
-//     propriedades.custo += custo;
-//     propriedades.expandidos++;
-//     propriedades.profundidade++;
-//     propriedades.backCond = false;
-// }
+function attJogada(jogatinas, jogada, propriedades, custo) { 
+    jogatinas.push(jogada);
+    propriedades.custo += custo;
+    propriedades.expandidos++;
+    propriedades.profundidade++;
+    propriedades.backCond = false;
+}
 
 function verificaRepeticaoEstados(caminho, fichas, indVazio) {
     console.log(caminho);
