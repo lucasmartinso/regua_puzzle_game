@@ -1,6 +1,7 @@
 //concertar o fracasso, pq se ele voltar ao estado inicial ja eh fracasso, nn precisa fzr mais um monte de jogadas
-export function backtracking(n, fichas) { 
-    //let fichas = ['P','V','V',null,'P'];
+//fracasso nao esta funcionando, concertar
+export function backtracking(n) { 
+    //let fichas = ['P','X','V',null,'Y'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     let propriedades = { custo: 0, profundidade: 0, expandidos: 0, backCond: false };
     let sucessFail = undefined;

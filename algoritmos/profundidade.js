@@ -1,7 +1,8 @@
 //COMPORTAMENTO DE PILHA
+//INSERIR DE TRAS TRAS PARA FRENTE NA LISTA JOGADA 4, 3, 2 E POR ULTIMO 1
 export function profundidade(n, fichas) { 
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
-    const abertos = [{estado: [], pai: -1}]; //vai sendo explorado como uma fila
+    const abertos = [{estado: [], pai: -1}]; //vai sendo explorado como uma pilha
     const fechados = [];
     let propriedades = { custo: 0, profundidade: 0, expandidos: 1, explorados: 0};
     let sucessFail = undefined;
@@ -25,7 +26,7 @@ export function profundidade(n, fichas) {
             sucessFail = false;
             break;
         } else { 
-            const primeiroDaLista = abertos.shift(); //fila, firt in fist out
+            const primeiroDaLista = abertos.pop(); //pilha, firt in last out
             propriedades.explorados++;
 
             if(!fechados.length) fechados.push(primeiroDaLista);

@@ -1,5 +1,4 @@
 //COMPORTAMENTO DE FILA
-//INSERIR DE TRAS TRAS PARA FRENTE NA LISTA JOGADA 4, 3, 2 E POR ULTIMO 1
 export function largura(n, fichas) { 
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const abertos = [{estado: [], pai: -1}]; //vai sendo explorado como uma fila
@@ -26,7 +25,7 @@ export function largura(n, fichas) {
             sucessFail = false;
             break;
         } else { 
-            const ultimoDaLista = abertos.pop(); //pilha, firt in last out
+            const primeiroDaLista = abertos.shift(); //fila, firt in fist out
             propriedades.explorados++;
 
             if(!fechados.length) fechados.push(primeiroDaLista);
