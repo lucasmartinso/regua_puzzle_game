@@ -8,7 +8,7 @@ function main(n) {
 
     embaralhaSistema(tamSistema, pecas);
     //backtracking(tamSistema, pecas);
-    largura(tamSistema);
+    largura(tamSistema, pecas);
 
 }
 
