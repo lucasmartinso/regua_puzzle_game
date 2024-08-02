@@ -56,24 +56,40 @@ export function profundidade(n, fichas) {
                 console.log("SUCESSO");
                 break;
             } else { 
-                //tenta primeira jogada
-                if(indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
+                //tenta a quarta jogada
+                if(indVazio<n-1) { //so da pra andar para direita se o espaco vazio nao for a borda direita
                     const copiaFichas = []; 
                     for(let j=0; j<fichas.length; j++) { 
                         copiaFichas[j] = fechados[fechados.length-1].estado[j];
-                        attJogada(propriedades, 2);
                     }
-
-                    const auxTrocaPeca = copiaFichas[indVazio-2]; 
+    
+                    const auxTrocaPeca = copiaFichas[indVazio+1]; 
                     copiaFichas[indVazio] = auxTrocaPeca; 
-                    copiaFichas[indVazio-2] = null;
-
+                    copiaFichas[indVazio+1] = null;
+                    
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
                         abertos.push({estado: copiaFichas, pai: fechados.length-1});
-                        attJogada(propriedades, 2);
                     }
                 }
 
+                //tenta a terceira jogada
+                if(indVazio>0) { //so da pra andar para esquerda se o espaco vazio nao for a borda esquerda
+                    const copiaFichas = []; 
+                    for(let j=0; j<fichas.length; j++) { 
+                        copiaFichas[j] = fechados[fechados.length-1].estado[j];
+                    }
+    
+                    const auxTrocaPeca = copiaFichas[indVazio-1]; 
+                    copiaFichas[indVazio] = auxTrocaPeca; 
+                    copiaFichas[indVazio-1] = null;
+                    
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
+                        abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                        attJogada(propriedades, 1);
+                    }
+                }
+
+                //tenta a segunda jogada
                 if(indVazio<=n-3) { //so da pra fazer o salto a esquerda, se o espaco vazio estiver no max 2 posicoes da borda da direita, ou seja, n-3(antepenultima)
                     const copiaFichas = []; 
                     for(let j=0; j<fichas.length; j++) { 
@@ -90,35 +106,21 @@ export function profundidade(n, fichas) {
                     }
                 }
 
-                if(indVazio>0) { //so da pra andar para esquerda se o espaco vazio nao for a borda esquerda
+                //tenta primeira jogada
+                if(indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
                     const copiaFichas = []; 
                     for(let j=0; j<fichas.length; j++) { 
                         copiaFichas[j] = fechados[fechados.length-1].estado[j];
+                        attJogada(propriedades, 2);
                     }
-    
-                    const auxTrocaPeca = copiaFichas[indVazio-1]; 
+
+                    const auxTrocaPeca = copiaFichas[indVazio-2]; 
                     copiaFichas[indVazio] = auxTrocaPeca; 
-                    copiaFichas[indVazio-1] = null;
-                    
+                    copiaFichas[indVazio-2] = null;
+
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
                         abertos.push({estado: copiaFichas, pai: fechados.length-1});
-                        attJogada(propriedades, 1);
-                    }
-                }
-    
-                //tenta a quarta jogada
-                if(indVazio<n-1) { //so da pra andar para direita se o espaco vazio nao for a borda direita
-                    const copiaFichas = []; 
-                    for(let j=0; j<fichas.length; j++) { 
-                        copiaFichas[j] = fechados[fechados.length-1].estado[j];
-                    }
-    
-                    const auxTrocaPeca = copiaFichas[indVazio+1]; 
-                    copiaFichas[indVazio] = auxTrocaPeca; 
-                    copiaFichas[indVazio+1] = null;
-                    
-                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
-                        abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                        attJogada(propriedades, 2);
                     }
                 }
             }
