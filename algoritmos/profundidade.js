@@ -1,7 +1,7 @@
 //COMPORTAMENTO DE PILHA
 //INSERIR DE TRAS TRAS PARA FRENTE NA LISTA JOGADA 4, 3, 2 E POR ULTIMO 1
 export function profundidade(n) { 
-    let fichas = ['P','V',null,'V','P'];
+    let fichas = ['P','X',null,'Y','Z'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const abertos = [{estado: [], pai: -1}]; //vai sendo explorado como uma pilha
     const fechados = [];
