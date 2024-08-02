@@ -8,8 +8,8 @@ function main(n) {
 
     embaralhaSistema(tamSistema, pecas);
     //backtracking(tamSistema, pecas);
-    largura(tamSistema, pecas);
-
+    //largura(tamSistema, pecas);
+    profundidade(tamSistema, pecas);
 }
 
 function embaralhaSistema(n, pecas) { 
