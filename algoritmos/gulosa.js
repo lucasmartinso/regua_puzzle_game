@@ -3,9 +3,16 @@
 //F(N) = H(N)
 //CUSTO += DISTANCIA DAS ARESTAS DO GRAFO PELA ESTRATEGIA DE CONTROLE
 export function gulosa(n) { 
-    let fichas = { estado: ['A',null,'P','P','A'], f: null, custo: 0 ,pai: -1};
+    //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
+    const abertos = [{estado: [], f: null, custo: 0 ,pai: -1}]; //vai sendo explorado como uma pilha
+    const fechados = [];
+    let propriedades = { custo: 0, profundidade: 0, expandidos: 1, explorados: 0};
+    let sucessFail = undefined;
+ 
+    for(let i=0; i<n; i++) { 
+        abertos[0].estado[i] = fichas[i]; //primeiro estado que vai ser explorado
+    }
 
-    console.log(heuristica(fichas));
 }
 
 //A HEURÍSTICA ADOTADA EH:
