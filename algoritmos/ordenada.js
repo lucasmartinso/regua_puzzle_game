@@ -124,6 +124,7 @@ export function ordenada(n, fichas) {
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + 1)) {
                         abertos.push({estado: copiaFichas, custo: possivelCusto + 1, pai: fechados.length-1});
+                        attJogada(propriedades, 1);
                     }
                 }
             }

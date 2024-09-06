@@ -118,6 +118,7 @@ export function largura(n, fichas) {
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
                         abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                        attJogada(propriedades, 1);
                     }
                 }
             }

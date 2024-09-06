@@ -30,11 +30,11 @@ export function gulosa(n) {
             sucessFail = false;
             break;
         } else { 
-            abertos.sort((a, b) => a.f - b.f); //organiza a lista de forma crescente
-            const primeiroDaLista = abertos.shift(); //cabeca da lista vertice mais barato
+            abertos.sort((a, b) => a.f - b.f); //organiza a lista de forma crescente de acordo c/ a heuristica
+            const primeiroDaLista = abertos.shift(); //cabeca da lista vertice c/ menor heuristica
             propriedades.explorados++; //mais um no explorado da lista de fechados
 
-            if(!fechados.length) fechados.push(primeiroDaLista);//adiciona mais barato a lista de fechados p/ ser explorado
+            if(!fechados.length) fechados.push(primeiroDaLista);//adiciona c/ heuristica mais barata a lista de fechados p/ ser explorado
             else {
                 fechados.push(primeiroDaLista);
             }
@@ -61,8 +61,6 @@ export function gulosa(n) {
                 console.log("SUCESSO");
                 break;
             } else { 
-                let possivelCusto = fechados[fechados.length-1].custo; //custo do pai + alguem
-
                 //tenta primeira jogada
                 if(indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
                     const copiaFichas = []; 
@@ -75,8 +73,10 @@ export function gulosa(n) {
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio-2] = null;
 
-                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + 2)) {
-                        abertos.push({estado: copiaFichas, custo: possivelCusto + 2, pai: fechados.length-1});
+                    const fn = heuristica(copiaFichas);
+
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
+                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 2, pai: fechados.length-1});
                         attJogada(propriedades, 2);
                     }
                 }
@@ -91,9 +91,11 @@ export function gulosa(n) {
                     const auxTrocaPeca = copiaFichas[indVazio+2]; 
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio+2] = null;
+
+                    const fn = heuristica(copiaFichas);
                     
-                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + 2)) {
-                        abertos.push({estado: copiaFichas, custo: possivelCusto + 2, pai: fechados.length-1});
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
+                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 2, pai: fechados.length-1});
                         attJogada(propriedades, 1);
                     }
                 }
@@ -108,9 +110,11 @@ export function gulosa(n) {
                     const auxTrocaPeca = copiaFichas[indVazio-1]; 
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio-1] = null;
+
+                    const fn = heuristica(copiaFichas);
                     
-                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + 1)) {
-                        abertos.push({estado: copiaFichas, custo: possivelCusto + 1, pai: fechados.length-1});
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
+                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 1, pai: fechados.length-1});
                         attJogada(propriedades, 1);
                     }
                 }
@@ -125,16 +129,19 @@ export function gulosa(n) {
                     const auxTrocaPeca = copiaFichas[indVazio+1]; 
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio+1] = null;
+
+                    const fn = heuristica(copiaFichas);
                     
-                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + 1)) {
-                        abertos.push({estado: copiaFichas, custo: possivelCusto + 1, pai: fechados.length-1});
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
+                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 1, pai: fechados.length-1});
+                        attJogada(propriedades, 1);
                     }
                 }
             }
         }
 
         console.log("ABERTOS");
-        console.log(abertos.sort((a, b) => a.custo - b.custo));
+        console.log(abertos.sort((a, b) => a.f - b.f));
 
         console.log("FECHADOS");
         console.log(fechados);
