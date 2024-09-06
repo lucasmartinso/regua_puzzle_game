@@ -154,6 +154,7 @@ export function ordenada(n, fichas) {
             console.log(caminho[i],"-->");
         }
         console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
+        console.log(`CUSTO DO CAMINHO: ${fechados[fechados.length-1].custo}`);
         console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
         console.log(`NOS VISITADOS ${propriedades.explorados}, NOS EXPANDIDOS ${propriedades.expandidos}`);
         console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: ${propriedades.expandidos/propriedades.explorados}`);

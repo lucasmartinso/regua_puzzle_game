@@ -2,7 +2,7 @@
 //SÓ QUE ESTADOS VÃO SER AVALIADOS COM SEUS CUSTOS
 //F(N) = H(N)
 //CUSTO += DISTANCIA DAS ARESTAS DO GRAFO PELA ESTRATEGIA DE CONTROLE
-export function gulosa(n) { 
+export function gulosa(n, fichas) { 
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const abertos = [{estado: [], f: null, custo: 0 ,pai: -1}]; //vai sendo explorado como uma pilha
     const fechados = [];
@@ -61,6 +61,8 @@ export function gulosa(n) {
                 console.log("SUCESSO");
                 break;
             } else { 
+                let possivelCusto = fechados[fechados.length-1].custo; //custo do pai + alguem
+
                 //tenta primeira jogada
                 if(indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
                     const copiaFichas = []; 
@@ -164,6 +166,7 @@ export function gulosa(n) {
             console.log(caminho[i],"-->");
         }
         console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
+        console.log(`CUSTO DO CAMINHO: ${fechados[fechados.length-1].custo}`);
         console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
         console.log(`NOS VISITADOS ${propriedades.explorados}, NOS EXPANDIDOS ${propriedades.expandidos}`);
         console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: ${propriedades.expandidos/propriedades.explorados}`);
@@ -180,15 +183,15 @@ export function gulosa(n) {
 //5) H(N) = PASSO 3) + PASSO 4)
 function heuristica(estadoAtual) { 
     //PASSO 1)
-    let primeiroSimbolo = estadoAtual.estado[0] ? estadoAtual.estado[0] : estadoAtual.estado[1]; //pega o primeiro simbolo ignorando o null
-    let indicePrimeiro = estadoAtual.estado[0] ? 0 : 1; //indice do primeiro simbolo 
+    let primeiroSimbolo = estadoAtual[0] ? estadoAtual[0] : estadoAtual[1]; //pega o primeiro simbolo ignorando o null
+    let indicePrimeiro = estadoAtual[0] ? 0 : 1; //indice do primeiro simbolo 
 
     //PASSO 2)
     let ultimoIndice = 0; //ultimo ocorrencia do mesmo simbolo do passo 1)
     let nullIsHere = false;
-    for(let i=indicePrimeiro; i<estadoAtual.estado.length; i++) { 
-        if(estadoAtual.estado[i] === primeiroSimbolo) ultimoIndice = i;
-        else if(!estadoAtual.estado[i]) nullIsHere = true;
+    for(let i=indicePrimeiro; i<estadoAtual.length; i++) { 
+        if(estadoAtual[i] === primeiroSimbolo) ultimoIndice = i;
+        else if(!estadoAtual[i]) nullIsHere = true;
     }
 
     //PASSO 3) 
@@ -197,10 +200,27 @@ function heuristica(estadoAtual) {
     //PASSO 4)
     let diffSimbolos = 0;
     for(let i=0; i<ultimoIndice; i++) { 
-        if(estadoAtual.estado[i] !== primeiroSimbolo && estadoAtual.estado[i]) 
+        if(estadoAtual[i] !== primeiroSimbolo && estadoAtual[i]) 
             diffSimbolos++;
     }
 
     //PASSO 5)  
     return diffIndices + diffSimbolos;
+}
+
+function verificaRepeticaoEstados(fechados, abertos, fichas, indVazio, fn) {
+    for(let i=0; i<fechados.length; i++) { 
+        const repetiuFechado = fechados[i].estado.every((value, index) => value === fichas[index]);
+        
+        //achou um estado repetido, que tem custo maior do que o ja presente na lista de fechados, então poda 
+        if(repetiuFechado && fechados[i].f<=fn)
+            return true; 
+    } 
+
+    return false; //passou por todos estados do caminho e nenhum deles era repetido
+}
+
+function attJogada(propriedades, custo) { 
+    propriedades.custo += custo;
+    propriedades.expandidos++;
 }
