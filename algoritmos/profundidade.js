@@ -1,7 +1,5 @@
 //COMPORTAMENTO DE PILHA
-//INSERIR DE TRAS TRAS PARA FRENTE NA LISTA JOGADA 4, 3, 2 E POR ULTIMO 1
-export function profundidade(n) { 
-    let fichas = ['P','X',null,'Y','Z'];
+export function profundidade(n, fichas) { 
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const abertos = [{estado: [], pai: -1}]; //vai sendo explorado como uma pilha
     const fechados = [];
@@ -162,12 +160,6 @@ function verificaRepeticaoEstados(fechados, abertos, fichas, indVazio) {
         const repetiuFechado = fechados[i].estado.every((value, index) => value === fichas[index]);
 
         if(repetiuFechado) return true; //achou um estado repetido
-    }
-
-    for(let i=0; i<abertos.length; i++) { 
-        const repetiuAberto = abertos[i].estado.every((value, index) => value === fichas[index]);
-
-        if(repetiuAberto) return true; //achou um estado repetido
     }
 
     return false; //passou por todos estados do caminho e nenhum deles era repetido
