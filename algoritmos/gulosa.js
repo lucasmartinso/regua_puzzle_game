@@ -1,10 +1,10 @@
 //IDEIA IGUAL DA BUSCA GULOSA
-//SÓ QUE ESTADOS VÃO SER AVALIADOS COM SEUS CUSTOS
-//F(N) = H(N)
+//SÓ QUE ESTADOS VÃO SER AVALIADOS COM BASE NA SUA HERISTICA
+//HEURISTICA: F(N) = H(N)
 //CUSTO += DISTANCIA DAS ARESTAS DO GRAFO PELA ESTRATEGIA DE CONTROLE
 export function gulosa(n, fichas) { 
-    //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
-    const abertos = [{estado: [], f: null, custo: 0 ,pai: -1}]; //vai sendo explorado como uma pilha
+    // //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
+    const abertos = [{estado: [], f: heuristica(fichas), custo: 0 ,pai: -1}]; //vai sendo explorado como uma pilha
     const fechados = [];
     let propriedades = { custo: 0, profundidade: 0, expandidos: 1, explorados: 0};
     let sucessFail = undefined;
@@ -19,7 +19,7 @@ export function gulosa(n, fichas) {
     //ESTADO INICIAL: RANDOMICO
     //ESTADO FINAL: MENOR CUSTO PARA QUE PECAS DE UM COR PARA UM LADO E PECAS DA OUTRA COR PARA O OUTRO
     //ESTRATÉGIA DE CONTROLE: Pula para direita(PD), Pula para esquerda(PE), Anda para direita(AD), Anda para esquerda(AE)
-    //ARESTAS: PD e PE -> +2, AD e AE -> +1
+    //CUSTO DAS ARESTAS: PD e PE -> +2, AD e AE -> +1
 
     console.time('TEMPO DE EXECUCAO'); //comeca a marcar o tempo
 
@@ -172,14 +172,13 @@ export function gulosa(n, fichas) {
         console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: ${propriedades.expandidos/propriedades.explorados}`);
         console.timeEnd('TEMPO DE EXECUCAO');
     }
-
 }
 
 //A HEURÍSTICA ADOTADA EH:
 //1) ACHAR PRIMEIRO SIMBOLO QUALQUER, MENOS O 'NULL'
 //2) ACHA A POSICAO DO ULTIMO SIMBOLO IGUAL DO PASSO 1)
-//3) POSICAO DO PASSO 2) - POSICAO DO PASSO 1) -1(POSICAO LADO A LADO) -nullIsHere(DESCONSIDERAR O NULL POIS ELE NAO INTERFERE SE EH SOLUCAO OU NN)
-//4) SOMA A QUANTIDADE DE SIMBOLOS DIFERENTE INCLUINDO O NULL ENTRE ELES
+//3) SOMA A QUANTIDADE DE SIMBOLOS DIFERENTE INCLUINDO O NULL ENTRE ELES
+//4) POSICAO DO PASSO 2) - POSICAO DO PASSO 1) -1(POSICAO LADO A LADO) -nullIsHere(DESCONSIDERAR O NULL POIS ELE NAO INTERFERE SE EH SOLUCAO OU NN)
 //5) H(N) = PASSO 3) + PASSO 4)
 function heuristica(estadoAtual) { 
     //PASSO 1)
@@ -191,18 +190,18 @@ function heuristica(estadoAtual) {
     let nullIsHere = false;
     for(let i=indicePrimeiro; i<estadoAtual.length; i++) { 
         if(estadoAtual[i] === primeiroSimbolo) ultimoIndice = i;
+    }
+    
+    //PASSO 3)
+    let diffSimbolos = 0;
+    for(let i=indicePrimeiro; i<ultimoIndice; i++) { 
+        if(estadoAtual[i] !== primeiroSimbolo && estadoAtual[i]) diffSimbolos++;
         else if(!estadoAtual[i]) nullIsHere = true;
+
     }
 
-    //PASSO 3) 
+    //PASSO 4) 
     const diffIndices = ultimoIndice - indicePrimeiro -1 -nullIsHere; //-1 pq tem que considerar a posicao lado a lado, nn tem como duas pecas estar na msm posicao
-    
-    //PASSO 4)
-    let diffSimbolos = 0;
-    for(let i=0; i<ultimoIndice; i++) { 
-        if(estadoAtual[i] !== primeiroSimbolo && estadoAtual[i]) 
-            diffSimbolos++;
-    }
 
     //PASSO 5)  
     return diffIndices + diffSimbolos;

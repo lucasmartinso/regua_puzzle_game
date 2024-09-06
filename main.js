@@ -12,8 +12,8 @@ function main(n) {
     //backtracking(tamSistema, pecas);
     //largura(tamSistema, pecas);
     //profundidade(tamSistema, pecas);
-    ordenada(tamSistema, pecas);
-    //gulosa(tamSistema, pecas);
+    //ordenada(tamSistema, pecas);
+    gulosa(tamSistema, pecas);
 }
 
 function embaralhaSistema(n, pecas) { 
