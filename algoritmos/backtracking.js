@@ -1,7 +1,9 @@
 //concertar o fracasso, pq se ele voltar ao estado inicial ja eh fracasso, nn precisa fzr mais um monte de jogadas
 //fracasso nao esta funcionando, concertar
 export function backtracking(n) { 
-    //let fichas = ['P','X','V',null,'Y'];
+    //let fichas = ['P','V','V',null,'P'];
+    let fichas = ['X','V','Y',null,'P'];
+
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     let propriedades = { custo: 0, profundidade: 0, expandidos: 0, backCond: false };
     let sucessFail = undefined;
@@ -50,7 +52,9 @@ export function backtracking(n) {
     console.time('TEMPO DE EXECUCAO'); //comeca a marcar o tempo
 
     const jogadas = ['PD','PE','AD','AE'];
-    while(sucessFail !== true && sucessFail !== false) {
+
+    let it = 0;
+    while(sucessFail !== true && sucessFail !== false) { // //it<1
         //faz jogada 
         for(let i=0; i<jogadas.length; i++) {
             const indVazio = fichas.indexOf(null); //indice do espaco vazio
@@ -154,7 +158,7 @@ export function backtracking(n) {
             sucessFail = true;
             console.log("SUCESSO");
             break;
-        } else if(!jogatinas.length) {
+        } else if(verifcaFracasso(estInicial, fichas)) {
             sucessFail = false; 
             console.log("FRACASSO");
             break;
@@ -209,4 +213,13 @@ function verificaRepeticaoEstados(caminho, fichas, indVazio) {
     }
 
     return false; //passou por todos estados do caminho e nenhum deles era repetido
+}
+
+function verifcaFracasso(estInicial, estAtual) {
+    for(let i=0; i<estInicial.length; i++) { 
+        if(estInicial[i] === estAtual[i]) 
+            return false; //estAtual != estInicial
+    }
+
+    return true; //estAtual == estInicial
 }

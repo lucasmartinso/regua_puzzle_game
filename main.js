@@ -4,18 +4,20 @@ import { largura } from "./algoritmos/largura.js";
 import { ordenada } from "./algoritmos/ordenada.js";
 import { gulosa } from "./algoritmos/gulosa.js";
 import { a_estrela } from "./algoritmos/a_estrela.js";
+import { ida_estrela } from "./algoritmos/ida_estrela.js";
 
 function main(n) { 
     const tamSistema = 2*n + 1; //n blocos pretos e n blocos brancos + um espaço vazio
     const pecas = [];
 
     embaralhaSistema(tamSistema, pecas);
-    //backtracking(tamSistema, pecas);
+    backtracking(tamSistema, pecas);
     //largura(tamSistema, pecas);
     //profundidade(tamSistema, pecas);
     //ordenada(tamSistema, pecas);
-    gulosa(tamSistema, pecas);
+    //gulosa(tamSistema, pecas);
     //a_estrela(tamSistema, pecas);
+    //ida_estrela(tamSistema, pecas);
 }
 
 function embaralhaSistema(n, pecas) { 
@@ -38,4 +40,4 @@ function embaralhaSistema(n, pecas) {
     }
 }
 
-main(5);
+main(2);
