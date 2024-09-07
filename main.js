@@ -14,8 +14,8 @@ function main(n) {
     //largura(tamSistema, pecas);
     //profundidade(tamSistema, pecas);
     //ordenada(tamSistema, pecas);
-    //gulosa(tamSistema, pecas);
-    a_estrela(tamSistema, pecas);
+    gulosa(tamSistema, pecas);
+    //a_estrela(tamSistema, pecas);
 }
 
 function embaralhaSistema(n, pecas) { 
@@ -38,4 +38,4 @@ function embaralhaSistema(n, pecas) {
     }
 }
 
-main(2);
+main(5);
