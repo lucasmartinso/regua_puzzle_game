@@ -27,7 +27,7 @@ export function a_estrela(n, fichas) {
 
     const jogadas = ['PD','PE','AD','AE'];
     let it = 0;
-    while(it<1) { //sucessFail !== true && sucessFail !== false
+    while(sucessFail !== true && sucessFail !== false) { //
         if(!abertos.length) { 
             console.log("FRACASSO"); 
             sucessFail = false;
@@ -77,10 +77,10 @@ export function a_estrela(n, fichas) {
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio-2] = null;
 
-                    const fn = heuristica(copiaFichas, possivelCusto + 2);
+                    const fn = heuristica(copiaFichas, possivelCusto + calcCustos(copiaFichas));
 
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
-                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 2, pai: fechados.length-1});
+                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + calcCustos(copiaFichas), pai: fechados.length-1});
                         attJogada(propriedades, copiaFichas);
                     }
                 }
@@ -96,10 +96,10 @@ export function a_estrela(n, fichas) {
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio+2] = null;
 
-                    const fn = heuristica(copiaFichas, possivelCusto + 2);
+                    const fn = heuristica(copiaFichas, possivelCusto + calcCustos(copiaFichas));
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
-                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 2, pai: fechados.length-1});
+                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + calcCustos(copiaFichas), pai: fechados.length-1});
                         attJogada(propriedades, copiaFichas);
                     }
                 }
@@ -115,10 +115,10 @@ export function a_estrela(n, fichas) {
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio-1] = null;
 
-                    const fn = heuristica(copiaFichas, possivelCusto + 1);
+                    const fn = heuristica(copiaFichas, possivelCusto + calcCustos(copiaFichas));
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
-                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 1, pai: fechados.length-1});
+                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + calcCustos(copiaFichas), pai: fechados.length-1});
                         attJogada(propriedades, copiaFichas);
                     }
                 }
@@ -134,10 +134,10 @@ export function a_estrela(n, fichas) {
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio+1] = null;
 
-                    const fn = heuristica(copiaFichas, possivelCusto + 1);
+                    const fn = heuristica(copiaFichas, possivelCusto + calcCustos(copiaFichas));
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
-                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 1, pai: fechados.length-1});
+                        abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + calcCustos(copiaFichas), pai: fechados.length-1});
                         attJogada(propriedades, copiaFichas);
                     }
                 }
