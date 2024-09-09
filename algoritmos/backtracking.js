@@ -1,15 +1,11 @@
 //concertar o fracasso, pq se ele voltar ao estado inicial ja eh fracasso, nn precisa fzr mais um monte de jogadas
 //fracasso nao esta funcionando, concertar
-export function backtracking(n) { 
-    //let fichas = ['P','V','V',null,'P'];
-    let fichas = ['X','V','Y',null,'P'];
-
+export function backtracking(n, fichas) { 
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     let propriedades = { custo: 0, profundidade: 0, expandidos: 0, backCond: false };
     let sucessFail = undefined;
-    const caminho = [[]];
+    const caminho = [{estado: [], block: []}];
     const estInicial = []; 
-    const proibidos = [{estado: [], block: []}]; //nao repetir a jogada que resultou em backtracking, add em um objeto cada estado e um vetor de blockPlays 
     const jogatinas = [];
     let contaBacktracks = 0;
 
@@ -17,8 +13,7 @@ export function backtracking(n) {
     console.log(`ESTADO INICIAL: ${fichas}\n`);
     for(let i=0; i<n; i++) { 
         estInicial[i] = fichas[i];
-        caminho[0][i] = fichas[i];
-        proibidos[0].estado[i] = fichas[i];
+        caminho[0].estado[i] = fichas[i];
     }
 
     //verifica se ja esta organizado
@@ -74,11 +69,10 @@ export function backtracking(n) {
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio-2] = null;
 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(0))) {
+                if(!propriedades.backCond && !verificaRepeticaoEstados(caminho,copiaFichas, indVazio) || (propriedades.backCond && !caminho[caminho.length-1].block.includes(0))) {
                     attJogada(jogatinas, 0, propriedades, 2);
                     fichas = copiaFichas;
-                    caminho.push(fichas);
-                    proibidos.push({estado: fichas, block: []});
+                    caminho.push({estado: fichas, block: []});
                     break;
                 }
             }
@@ -91,11 +85,10 @@ export function backtracking(n) {
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio+2] = null;
                 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(1))) { // && !proibidos[proibidos.length-1].block.includes(1)
+                if(!propriedades.backCond && !verificaRepeticaoEstados(caminho,copiaFichas, indVazio) || (propriedades.backCond && !caminho[caminho.length-1].block.includes(1))) { 
                     attJogada(jogatinas, 1, propriedades, 2);
                     fichas = copiaFichas;
-                    caminho.push(fichas);
-                    proibidos.push({estado: fichas, block: [0]});
+                    caminho.push({estado: fichas, block: [0]});
                     break;
                 }
             }
@@ -108,11 +101,10 @@ export function backtracking(n) {
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio-1] = null;
                 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(2))) {
+                if(!propriedades.backCond && !verificaRepeticaoEstados(caminho,copiaFichas, indVazio) || (propriedades.backCond && !caminho[caminho.length-1].block.includes(2))) {
                     attJogada(jogatinas, 2, propriedades, 1);
                     fichas = copiaFichas;
-                    caminho.push(fichas);
-                    proibidos.push({estado: fichas, block: [0,1]});
+                    caminho.push({estado: fichas, block: [0,1]});
                     break;
                 }
             }
@@ -125,21 +117,20 @@ export function backtracking(n) {
                 copiaFichas[indVazio] = auxTrocaPeca; 
                 copiaFichas[indVazio+1] = null;
                 
-                if(!verificaRepeticaoEstados(caminho,copiaFichas, indVazio) && (!propriedades.backCond || !proibidos[proibidos.length-1].block.includes(3))) {
+                if(!propriedades.backCond && !verificaRepeticaoEstados(caminho,copiaFichas, indVazio) || (propriedades.backCond && !caminho[caminho.length-1].block.includes(3))) {
                     attJogada(jogatinas, 3, propriedades, 1);
                     fichas = copiaFichas;
-                    caminho.push(fichas);
-                    proibidos.push({estado: fichas, block: [0,1,2]});
+                    caminho.push({estado: fichas, block: [0,1,2]});
                     break;
                 } else {
                     contaBacktracks++;
-                    bt(caminho, fichas, propriedades, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
+                    bt(caminho, fichas, propriedades, jogatinas); //backtracking se resultar em estado repetido tb
                 }
             } 
             
             else if(i==3){
                 contaBacktracks++;
-                bt(caminho, fichas, propriedades, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
+                bt(caminho, fichas, propriedades, jogatinas); //backtracking se resultar em estado repetido tb
             }
         }
 
@@ -178,29 +169,30 @@ export function backtracking(n) {
     if(sucessFail) {
         console.log("CAMINHO: ");
         for(let i=0; i<caminho.length; i++) {
-            console.log(caminho[i],"-->");
+            console.log(caminho[i].estado,"-->");
         }
         console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
         console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
         console.log(`NOS VISITADOS ${propriedades.expandidos+1}, NOS EXPANDIDOS ${propriedades.expandidos}`);
         console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: 1`);
         console.timeEnd('TEMPO DE EXECUCAO');
-        console.log(jogatinas);
     }
 }
 
-function bt(caminho, fichas, propriedades, jogatinas, proibidos) { 
+function bt(caminho, fichas, propriedades, jogatinas) { 
     console.log("BACKTRACKING");
+    console.log(caminho[caminho.length-1]);
     caminho.pop(); //retira do caminho o estado invalido que sofreu backtracking
-    proibidos.pop(); //retira dos estados validos
     const indJogada = jogatinas.pop(); //jogada anterior que caiu no estado que foi um backtracking
-    proibidos[proibidos.length-1].block.push(indJogada); //adiciona a jogada proibida
+    caminho[caminho.length-1].block.push(indJogada); //adiciona jogada bloqueada
     propriedades.custo += 3;
     propriedades.profundidade--;
     propriedades.backCond = true;
+    //console.log(caminho[caminho.length-1]);
+    //console.log(caminho);
 
     for(let k=0; k<fichas.length; k++) { 
-        fichas[k] = caminho[caminho.length-1][k];
+        fichas[k] = caminho[caminho.length-1].estado[k];
     }
 }
 
@@ -216,7 +208,7 @@ function verificaRepeticaoEstados(caminho, fichas, indVazio) {
     console.log(caminho);
     console.log(fichas);
     for(let i=0; i<caminho.length; i++) { 
-        const repetiu = caminho[i].every((value, index) => value === fichas[index]);
+        const repetiu = caminho[i].estado.every((value, index) => value === fichas[index]);
 
         if(repetiu) return true; //achou um estado repetido
     }

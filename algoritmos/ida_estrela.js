@@ -201,7 +201,8 @@ export function ida_estrela(n, fichas) {
         for(let i=0; i<caminho.length; i++) { 
             console.log(caminho[i],"-->");
         }
-        console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
+        console.log(`\nPATAMAR FINAL: ${patamar}`);
+        console.log(`CUSTO DA OPERACAO: ${propriedades.custo}`);
         console.log(`CUSTO DO CAMINHO: ${fechados[fechados.length-1].custo}`);
         console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
         console.log(`NOS VISITADOS ${propriedades.explorados}, NOS EXPANDIDOS ${propriedades.expandidos}`);
