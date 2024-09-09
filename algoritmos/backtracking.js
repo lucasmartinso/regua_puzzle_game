@@ -70,7 +70,7 @@ export function backtracking(n, fichas) {
                 copiaFichas[indVazio-2] = null;
 
                 if(!propriedades.backCond && !verificaRepeticaoEstados(caminho,copiaFichas, indVazio) || (propriedades.backCond && !caminho[caminho.length-1].block.includes(0))) {
-                    attJogada(jogatinas, 0, propriedades, 2);
+                    attJogada(jogatinas, 0, propriedades, copiaFichas);
                     fichas = copiaFichas;
                     caminho.push({estado: fichas, block: []});
                     break;
@@ -86,7 +86,7 @@ export function backtracking(n, fichas) {
                 copiaFichas[indVazio+2] = null;
                 
                 if(!propriedades.backCond && !verificaRepeticaoEstados(caminho,copiaFichas, indVazio) || (propriedades.backCond && !caminho[caminho.length-1].block.includes(1))) { 
-                    attJogada(jogatinas, 1, propriedades, 2);
+                    attJogada(jogatinas, 1, propriedades, copiaFichas);
                     fichas = copiaFichas;
                     caminho.push({estado: fichas, block: [0]});
                     break;
@@ -102,7 +102,7 @@ export function backtracking(n, fichas) {
                 copiaFichas[indVazio-1] = null;
                 
                 if(!propriedades.backCond && !verificaRepeticaoEstados(caminho,copiaFichas, indVazio) || (propriedades.backCond && !caminho[caminho.length-1].block.includes(2))) {
-                    attJogada(jogatinas, 2, propriedades, 1);
+                    attJogada(jogatinas, 2, propriedades, copiaFichas);
                     fichas = copiaFichas;
                     caminho.push({estado: fichas, block: [0,1]});
                     break;
@@ -118,7 +118,7 @@ export function backtracking(n, fichas) {
                 copiaFichas[indVazio+1] = null;
                 
                 if(!propriedades.backCond && !verificaRepeticaoEstados(caminho,copiaFichas, indVazio) || (propriedades.backCond && !caminho[caminho.length-1].block.includes(3))) {
-                    attJogada(jogatinas, 3, propriedades, 1);
+                    attJogada(jogatinas, 3, propriedades, copiaFichas);
                     fichas = copiaFichas;
                     caminho.push({estado: fichas, block: [0,1,2]});
                     break;
@@ -162,8 +162,6 @@ export function backtracking(n, fichas) {
             break;
         }
         console.log("\n");
-
-        it++;
     }
 
     if(sucessFail) {
@@ -196,14 +194,6 @@ function bt(caminho, fichas, propriedades, jogatinas) {
     }
 }
 
-function attJogada(jogatinas, jogada, propriedades, custo) { 
-    jogatinas.push(jogada);
-    propriedades.custo += custo;
-    propriedades.expandidos++;
-    propriedades.profundidade++;
-    propriedades.backCond = false;
-}
-
 function verificaRepeticaoEstados(caminho, fichas, indVazio) {
     console.log(caminho);
     console.log(fichas);
@@ -223,4 +213,25 @@ function verifcaFracasso(estInicial, estAtual) {
     }
 
     return true; //estAtual == estInicial
+}
+
+function attJogada(jogatinas, jogada, propriedades, proxEstado) { 
+    jogatinas.push(jogada);
+    propriedades.custo += calcCustos(proxEstado);
+    propriedades.expandidos++;
+    propriedades.profundidade++;
+    propriedades.backCond = false;
+}
+
+function calcCustos(proxEstado) {
+    const primeiroSimbolo = proxEstado[0] ? proxEstado[0] : proxEstado[1]; //pega o primeiro simbolo ignorando o null
+    const indicePrimeiro = proxEstado[0] ? 0 : 1; //indice do primeiro simbolo 
+    
+    let ultOcorrencia = 0;
+    for(let i=indicePrimeiro; i<proxEstado.length; i++) { 
+        if(primeiroSimbolo === proxEstado[i])
+            ultOcorrencia = i;
+    }
+
+    return ultOcorrencia - indicePrimeiro;
 }

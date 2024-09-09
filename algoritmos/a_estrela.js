@@ -26,7 +26,6 @@ export function a_estrela(n, fichas) {
     console.time('TEMPO DE EXECUCAO'); //comeca a marcar o tempo
 
     const jogadas = ['PD','PE','AD','AE'];
-    let it = 0;
     while(sucessFail !== true && sucessFail !== false) { //
         if(!abertos.length) { 
             console.log("FRACASSO"); 
@@ -149,8 +148,6 @@ export function a_estrela(n, fichas) {
 
         console.log("FECHADOS");
         console.log(fechados);
-
-        it++;
     }
 
     if(sucessFail) {

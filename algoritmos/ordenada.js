@@ -64,16 +64,16 @@ export function ordenada(n, fichas) {
                     const copiaFichas = []; 
                     for(let j=0; j<fichas.length; j++) { 
                         copiaFichas[j] = fechados[fechados.length-1].estado[j];
-                        attJogada(propriedades, 2);
+                        attJogada(propriedades, copiaFichas);
                     }
 
                     const auxTrocaPeca = copiaFichas[indVazio-2]; 
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio-2] = null;
 
-                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + 2)) {
-                        abertos.push({estado: copiaFichas, custo: possivelCusto + 2, pai: fechados.length-1});
-                        attJogada(propriedades, 2);
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + calcCustos(copiaFichas))) {
+                        abertos.push({estado: copiaFichas, custo: possivelCusto + calcCustos(copiaFichas), pai: fechados.length-1});
+                        attJogada(propriedades, copiaFichas);
                     }
                 }
                 
@@ -88,9 +88,9 @@ export function ordenada(n, fichas) {
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio+2] = null;
                     
-                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + 2)) {
-                        abertos.push({estado: copiaFichas, custo: possivelCusto + 2, pai: fechados.length-1});
-                        attJogada(propriedades, 1);
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + calcCustos(copiaFichas))) {
+                        abertos.push({estado: copiaFichas, custo: possivelCusto + calcCustos(copiaFichas), pai: fechados.length-1});
+                        attJogada(propriedades, copiaFichas);
                     }
                 }
                 
@@ -105,9 +105,9 @@ export function ordenada(n, fichas) {
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio-1] = null;
                     
-                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + 1)) {
-                        abertos.push({estado: copiaFichas, custo: possivelCusto + 1, pai: fechados.length-1});
-                        attJogada(propriedades, 1);
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + calcCustos(copiaFichas))) {
+                        abertos.push({estado: copiaFichas, custo: possivelCusto + calcCustos(copiaFichas), pai: fechados.length-1});
+                        attJogada(propriedades, copiaFichas);
                     }
                 }
     
@@ -122,9 +122,9 @@ export function ordenada(n, fichas) {
                     copiaFichas[indVazio] = auxTrocaPeca; 
                     copiaFichas[indVazio+1] = null;
                     
-                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + 1)) {
-                        abertos.push({estado: copiaFichas, custo: possivelCusto + 1, pai: fechados.length-1});
-                        attJogada(propriedades, 1);
+                    if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, possivelCusto + calcCustos(copiaFichas))) {
+                        abertos.push({estado: copiaFichas, custo: possivelCusto + calcCustos(copiaFichas), pai: fechados.length-1});
+                        attJogada(propriedades, copiaFichas);
                     }
                 }
             }
@@ -174,7 +174,20 @@ function verificaRepeticaoEstados(fechados, abertos, fichas, indVazio, possivelC
     return false; //passou por todos estados do caminho e nenhum deles era repetido
 }
 
-function attJogada(propriedades, custo) { 
-    propriedades.custo += custo;
+function attJogada(propriedades, proxEstado) { 
+    propriedades.custo += calcCustos(proxEstado);
     propriedades.expandidos++;
+}
+
+function calcCustos(proxEstado) {
+    const primeiroSimbolo = proxEstado[0] ? proxEstado[0] : proxEstado[1]; //pega o primeiro simbolo ignorando o null
+    const indicePrimeiro = proxEstado[0] ? 0 : 1; //indice do primeiro simbolo 
+    
+    let ultOcorrencia = 0;
+    for(let i=indicePrimeiro; i<proxEstado.length; i++) { 
+        if(primeiroSimbolo === proxEstado[i])
+            ultOcorrencia = i;
+    }
+
+    return ultOcorrencia - indicePrimeiro;
 }
