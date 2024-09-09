@@ -1,5 +1,5 @@
 export function ida_estrela(n) {
-    let fichas = ['A','P',null,'P','A'];
+    let fichas = ['X','Y',null,'P','Z'];
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const estadoInicial = [];
     let abertos = [{estado: [], f: heuristica(fichas,0), custo: 0 ,pai: -1}]; //vai sendo explorado como uma pilha
@@ -7,7 +7,9 @@ export function ida_estrela(n) {
     let descartados = []; //lista de descartados
     let propriedades = { custo: 0, profundidade: 0, expandidos: 1, explorados: 0}; //propriedades do grafo
     let sucessFail = undefined; //sucesso ou fracasso da busca 
-    let patamar = heuristica(fichas,0);
+    const patamarOld = heuristica(fichas,0);
+    let patamar = patamarOld;
+    let attPatamar = false;
 
     for(let i=0; i<n; i++) { 
         estadoInicial[i] = fichas[i]; //seta estado inicial
@@ -30,10 +32,8 @@ export function ida_estrela(n) {
  
     const jogadas = ['PD','PE','AD','AE'];
 
-    let it = 0;
-
-    while(it<3) { //sucessFail !== true && sucessFail !== false
-        if(!abertos.length) { 
+    while(sucessFail !== true && sucessFail !== false) {
+        if(patamar === patamarOld && attPatamar) { 
             console.log("FRACASSO"); 
             sucessFail = false;
             break;
@@ -156,20 +156,22 @@ export function ida_estrela(n) {
                     }
                 }
 
-                if(!abertos.length) { 
-                    patamar = descartados.sort((a, b) => a.patamar - b.patamar)[0].patamar;
-                    console.log(`ATUALIZA PATAMAR: ${patamar}`);
-                    fechados = [];
-                    abertos = [{estado: [], f: heuristica(estadoInicial,0), custo: 0 ,pai: -1}];
-                    descartados = [];
+                if(!abertos.length) {
+                    attPatamar = true;
 
-                    for(let i=0; i<n; i++) { 
-                        abertos[0].estado[i] = estadoInicial[i]; //reseta com novo patamar
+                    if(!descartados.length) {
+                        patamar = patamarOld;
+                    } else {
+                        patamar = descartados.sort((a, b) => a.patamar - b.patamar)[0].patamar;
+                        console.log(`ATUALIZA PATAMAR: ${patamar}`);
+                        fechados = [];
+                        abertos = [{estado: [], f: heuristica(estadoInicial,0), custo: 0 ,pai: -1}];
+                        descartados = [];
+
+                        for(let i=0; i<n; i++) { 
+                            abertos[0].estado[i] = estadoInicial[i]; //reseta com novo patamar
+                        }
                     }
-
-                    console.log(abertos);
-                    console.log(fechados);
-                    console.log(descartados);
                 }
             }
         }
@@ -182,8 +184,6 @@ export function ida_estrela(n) {
 
         console.log("DESCARTADOS")
         console.log(descartados);
-
-        it++;
     }
 }
 
