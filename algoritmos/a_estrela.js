@@ -1,6 +1,5 @@
 //FIXAR PESO DAS ARESTAS, TA DANDO PROBLEMA NA BUSCA
 
-
 //IDEIA IGUAL DA BUSCA GULOSA
 //SÓ QUE ESTADOS VÃO SER AVALIADOS COM BASE NA SUA HERISTICA + CAMINHO ATE ELES
 //HEURISTICA: F(N) = H(N)+ G(N)
@@ -27,7 +26,8 @@ export function a_estrela(n, fichas) {
     console.time('TEMPO DE EXECUCAO'); //comeca a marcar o tempo
 
     const jogadas = ['PD','PE','AD','AE'];
-    while(sucessFail !== true && sucessFail !== false) {
+    let it = 0;
+    while(it<1) { //sucessFail !== true && sucessFail !== false
         if(!abertos.length) { 
             console.log("FRACASSO"); 
             sucessFail = false;
@@ -71,7 +71,6 @@ export function a_estrela(n, fichas) {
                     const copiaFichas = []; 
                     for(let j=0; j<fichas.length; j++) { 
                         copiaFichas[j] = fechados[fechados.length-1].estado[j];
-                        attJogada(propriedades, 10);
                     }
 
                     const auxTrocaPeca = copiaFichas[indVazio-2]; 
@@ -82,7 +81,7 @@ export function a_estrela(n, fichas) {
 
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
                         abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 2, pai: fechados.length-1});
-                        attJogada(propriedades, 2);
+                        attJogada(propriedades, copiaFichas);
                     }
                 }
                 
@@ -101,7 +100,7 @@ export function a_estrela(n, fichas) {
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
                         abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 2, pai: fechados.length-1});
-                        attJogada(propriedades, 1);
+                        attJogada(propriedades, copiaFichas);
                     }
                 }
                 
@@ -120,7 +119,7 @@ export function a_estrela(n, fichas) {
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
                         abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 1, pai: fechados.length-1});
-                        attJogada(propriedades, 1);
+                        attJogada(propriedades, copiaFichas);
                     }
                 }
     
@@ -139,7 +138,7 @@ export function a_estrela(n, fichas) {
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio, fn)) {
                         abertos.push({estado: copiaFichas, f: fn, custo: possivelCusto + 1, pai: fechados.length-1});
-                        attJogada(propriedades, 1);
+                        attJogada(propriedades, copiaFichas);
                     }
                 }
             }
@@ -150,6 +149,8 @@ export function a_estrela(n, fichas) {
 
         console.log("FECHADOS");
         console.log(fechados);
+
+        it++;
     }
 
     if(sucessFail) {
@@ -223,7 +224,20 @@ function verificaRepeticaoEstados(fechados, abertos, fichas, indVazio, fn) {
     return false; //passou por todos estados do caminho e nenhum deles era repetido
 }
 
-function attJogada(propriedades, custo) { 
-    propriedades.custo += custo;
+function attJogada(propriedades, proxEstado) { 
+    propriedades.custo += calcCustos(proxEstado);
     propriedades.expandidos++;
+}
+
+function calcCustos(proxEstado) {
+    const primeiroSimbolo = proxEstado[0] ? proxEstado[0] : proxEstado[1]; //pega o primeiro simbolo ignorando o null
+    const indicePrimeiro = proxEstado[0] ? 0 : 1; //indice do primeiro simbolo 
+    
+    let ultOcorrencia = 0;
+    for(let i=indicePrimeiro; i<proxEstado.length; i++) { 
+        if(primeiroSimbolo === proxEstado[i])
+            ultOcorrencia = i;
+    }
+
+    return ultOcorrencia - indicePrimeiro;
 }
