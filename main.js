@@ -11,13 +11,13 @@ function main(n) {
     const pecas = [];
 
     embaralhaSistema(tamSistema, pecas);
-    backtracking(tamSistema, pecas);
+    //backtracking(tamSistema, pecas);
     //largura(tamSistema, pecas);
     //profundidade(tamSistema, pecas);
     //ordenada(tamSistema, pecas);
     //gulosa(tamSistema, pecas);
     //a_estrela(tamSistema, pecas);
-    //ida_estrela(tamSistema, pecas);
+    ida_estrela(tamSistema, pecas);
 }
 
 function embaralhaSistema(n, pecas) { 

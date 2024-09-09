@@ -11,6 +11,7 @@ export function backtracking(n) {
     const estInicial = []; 
     const proibidos = [{estado: [], block: []}]; //nao repetir a jogada que resultou em backtracking, add em um objeto cada estado e um vetor de blockPlays 
     const jogatinas = [];
+    let contaBacktracks = 0;
 
     //define o estado inicial
     console.log(`ESTADO INICIAL: ${fichas}\n`);
@@ -54,7 +55,7 @@ export function backtracking(n) {
     const jogadas = ['PD','PE','AD','AE'];
 
     let it = 0;
-    while(sucessFail !== true && sucessFail !== false) { // //it<1
+    while(sucessFail !== true && sucessFail !== false ) { ////
         //faz jogada 
         for(let i=0; i<jogadas.length; i++) {
             const indVazio = fichas.indexOf(null); //indice do espaco vazio
@@ -130,10 +131,16 @@ export function backtracking(n) {
                     caminho.push(fichas);
                     proibidos.push({estado: fichas, block: [0,1,2]});
                     break;
-                } else bt(caminho, fichas, propriedades, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
+                } else {
+                    contaBacktracks++;
+                    bt(caminho, fichas, propriedades, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
+                }
             } 
             
-            else if(i==3) bt(caminho, fichas, propriedades, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
+            else if(i==3){
+                contaBacktracks++;
+                bt(caminho, fichas, propriedades, jogatinas, proibidos); //backtracking se resultar em estado repetido tb
+            }
         }
 
         //verifica se eh o estado final
@@ -153,7 +160,7 @@ export function backtracking(n) {
             }
         }
     
-
+        
         if(teste) {
             sucessFail = true;
             console.log("SUCESSO");
@@ -164,6 +171,8 @@ export function backtracking(n) {
             break;
         }
         console.log("\n");
+
+        it++;
     }
 
     if(sucessFail) {
@@ -182,10 +191,10 @@ export function backtracking(n) {
 
 function bt(caminho, fichas, propriedades, jogatinas, proibidos) { 
     console.log("BACKTRACKING");
-    caminho.pop();
-    proibidos.pop();
+    caminho.pop(); //retira do caminho o estado invalido que sofreu backtracking
+    proibidos.pop(); //retira dos estados validos
     const indJogada = jogatinas.pop(); //jogada anterior que caiu no estado que foi um backtracking
-    proibidos[proibidos.length-1].block.push(indJogada);
+    proibidos[proibidos.length-1].block.push(indJogada); //adiciona a jogada proibida
     propriedades.custo += 3;
     propriedades.profundidade--;
     propriedades.backCond = true;
@@ -217,7 +226,7 @@ function verificaRepeticaoEstados(caminho, fichas, indVazio) {
 
 function verifcaFracasso(estInicial, estAtual) {
     for(let i=0; i<estInicial.length; i++) { 
-        if(estInicial[i] === estAtual[i]) 
+        if(estInicial[i] !== estAtual[i]) 
             return false; //estAtual != estInicial
     }
 

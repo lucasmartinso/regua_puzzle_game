@@ -8,9 +8,9 @@
 export function a_estrela(n, fichas) { 
     // //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const abertos = [{estado: [], f: heuristica(fichas,0), custo: 0 ,pai: -1}]; //vai sendo explorado como uma pilha
-    const fechados = [];
-    let propriedades = { custo: 0, profundidade: 0, expandidos: 1, explorados: 0};
-    let sucessFail = undefined;
+    const fechados = []; //lista de fechados
+    let propriedades = { custo: 0, profundidade: 0, expandidos: 1, explorados: 0}; //propriedades do grafo
+    let sucessFail = undefined; //sucesso ou fracasso da busca 
  
     for(let i=0; i<n; i++) { 
         abertos[0].estado[i] = fichas[i]; //primeiro estado que vai ser explorado
@@ -71,7 +71,7 @@ export function a_estrela(n, fichas) {
                     const copiaFichas = []; 
                     for(let j=0; j<fichas.length; j++) { 
                         copiaFichas[j] = fechados[fechados.length-1].estado[j];
-                        attJogada(propriedades, 2);
+                        attJogada(propriedades, 10);
                     }
 
                     const auxTrocaPeca = copiaFichas[indVazio-2]; 
