@@ -9,15 +9,37 @@ import { ida_estrela } from "./algoritmos/ida_estrela.js";
 function main(n) { 
     const tamSistema = 2*n + 1; //n blocos pretos e n blocos brancos + um espaço vazio
     const pecas = [];
+    const copias = [];
 
-    embaralhaSistema(tamSistema, pecas);
-    //backtracking(tamSistema, pecas);
-    //largura(tamSistema, pecas);
-    profundidade(tamSistema, pecas);
-    //ordenada(tamSistema, pecas);
-    //gulosa(tamSistema, pecas);
-    //a_estrela(tamSistema, pecas);
-    //ida_estrela(tamSistema, pecas);
+    embaralhaSistema(tamSistema, pecas); //gera vetor aleatorio embaralhado
+
+    console.log("\nBACKTRACKING");
+    copiaVet(pecas, copias);
+    backtracking(tamSistema, copias);
+
+    console.log("\nLARGURA");
+    copiaVet(pecas, copias);
+    largura(tamSistema, copias);
+
+    console.log("\nPROFUNDIDADE");
+    copiaVet(pecas, copias);
+    profundidade(tamSistema, copias);
+
+    console.log("\nORDENADA");
+    copiaVet(pecas, copias);
+    ordenada(tamSistema, copias);
+
+    console.log("\nGULOSA");
+    copiaVet(pecas, copias);
+    gulosa(tamSistema, copias);
+
+    console.log("\nA*");
+    copiaVet(pecas, copias);
+    a_estrela(tamSistema, copias);
+
+    console.log("\nIDA*");
+    copiaVet(pecas, copias);
+    ida_estrela(tamSistema, copias);
 }
 
 function embaralhaSistema(n, pecas) { 
@@ -40,4 +62,10 @@ function embaralhaSistema(n, pecas) {
     }
 }
 
-main(3);
+function copiaVet(fichas, copia) { 
+    for(let i=0; i<fichas.length; i++) { 
+        copia[i] = fichas[i];
+    }
+}
+
+main(2);

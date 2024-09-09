@@ -45,10 +45,10 @@ export function gulosa(n, fichas) {
             const primeiroEstado = fechados[fechados.length-1].estado[0] === null ? fechados[fechados.length-1].estado[1] : fechados[fechados.length-1].estado[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
             let teste = true;
             
-            console.log("\nCOMPARACAO: ");
+            //console.log("\nCOMPARACAO: ");
             for(let i=0; i<Math.floor(n/2) + somaSe; i++) {
                 if(fechados[fechados.length-1].estado[i] !== null) {
-                    console.log(`${primeiroEstado} == ${fechados[fechados.length-1].estado[i]} ???`) 
+                    //console.log(`${primeiroEstado} == ${fechados[fechados.length-1].estado[i]} ???`) 
                     if(primeiroEstado !== fechados[fechados.length-1].estado[i]) { 
                         teste = false;
                         break;
@@ -141,11 +141,11 @@ export function gulosa(n, fichas) {
             }
         }
 
-        console.log("ABERTOS");
-        console.log(abertos.sort((a, b) => a.f - b.f));
+        //console.log("ABERTOS");
+        //console.log(abertos.sort((a, b) => a.f - b.f));
 
-        console.log("FECHADOS");
-        console.log(fechados);
+        //console.log("FECHADOS");
+        //console.log(fechados);
     }
 
     if(sucessFail) {

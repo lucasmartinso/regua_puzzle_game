@@ -10,7 +10,7 @@ export function backtracking(n, fichas) {
     let contaBacktracks = 0;
 
     //define o estado inicial
-    console.log(`ESTADO INICIAL: ${fichas}\n`);
+    //console.log(`ESTADO INICIAL: ${fichas}\n`);
     for(let i=0; i<n; i++) { 
         estInicial[i] = fichas[i];
         caminho[0].estado[i] = fichas[i];
@@ -22,10 +22,10 @@ export function backtracking(n, fichas) {
     const primeiroEstado = fichas[0] === null ? fichas[1] : fichas[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
     let teste = true;
     
-    console.log("\nCOMPARACAO: ");
+    //console.log("\nCOMPARACAO: ");
     for(let i=0; i<Math.floor(fichas.length/2) + somaSe; i++) {
         if(fichas[i] !== null) {
-            console.log(`${primeiroEstado} == ${fichas[i]} ???`) 
+            //console.log(`${primeiroEstado} == ${fichas[i]} ???`) 
             if(primeiroEstado !== fichas[i]) { 
                 teste = false;
                 break;
@@ -63,7 +63,7 @@ export function backtracking(n, fichas) {
 
             //tenta primeira jogada
             if(i==0 && indVazio>=2) { //so da pra fazer o salto a direita, se o espaco vazio estiver no minimo 2 posicoes da borda esquerda, ou seja, posicao 2 
-                console.log("JOGADA 1");
+                //console.log("JOGADA 1");
 
                 const auxTrocaPeca = copiaFichas[indVazio-2]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
@@ -79,7 +79,7 @@ export function backtracking(n, fichas) {
 
             //tenta a segunda jogada
             else if(i==1 && indVazio<=n-3) { //so da pra fazer o salto a esquerda, se o espaco vazio estiver no max 2 posicoes da borda da direita, ou seja, n-3(antepenultima)
-                console.log("JOGADA 2");
+                //console.log("JOGADA 2");
 
                 const auxTrocaPeca = copiaFichas[indVazio+2]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
@@ -95,7 +95,7 @@ export function backtracking(n, fichas) {
 
             //tenta a terceira jogada
             else if(i==2 && indVazio>0) { //so da pra andar para esquerda se o espaco vazio nao for a borda esquerda
-                console.log("JOGADA 3");
+                //console.log("JOGADA 3");
 
                 const auxTrocaPeca = copiaFichas[indVazio-1]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
@@ -111,7 +111,7 @@ export function backtracking(n, fichas) {
 
             //tenta a quarta jogada
             else if(i==3 && indVazio<n-1) { //so da pra andar para direita se o espaco vazio nao for a borda direita
-                console.log("JOGADA 4");
+                //console.log("JOGADA 4");
 
                 const auxTrocaPeca = copiaFichas[indVazio+1]; 
                 copiaFichas[indVazio] = auxTrocaPeca; 
@@ -140,10 +140,10 @@ export function backtracking(n, fichas) {
         const primeiroEstado = fichas[0] === null ? fichas[1] : fichas[0]; //pega o primeiro estado para fazer a comparacao se ate a metade do vetor eh igual 
         let teste = true;
         
-        console.log("\nCOMPARACAO: ");
+        //console.log("\nCOMPARACAO: ");
         for(let i=0; i<Math.floor(fichas.length/2) + somaSe; i++) {
             if(fichas[i] !== null) {
-                console.log(`${primeiroEstado} == ${fichas[i]} ???`) 
+                //console.log(`${primeiroEstado} == ${fichas[i]} ???`) 
                 if(primeiroEstado !== fichas[i]) { 
                     teste = false;
                     break;
@@ -161,7 +161,7 @@ export function backtracking(n, fichas) {
             console.log("FRACASSO");
             break;
         }
-        console.log("\n");
+        //console.log("\n");
     }
 
     if(sucessFail) {
@@ -178,8 +178,8 @@ export function backtracking(n, fichas) {
 }
 
 function bt(caminho, fichas, propriedades, jogatinas) { 
-    console.log("BACKTRACKING");
-    console.log(caminho[caminho.length-1]);
+    //console.log("BACKTRACKING");
+    //console.log(caminho[caminho.length-1]);
     caminho.pop(); //retira do caminho o estado invalido que sofreu backtracking
     const indJogada = jogatinas.pop(); //jogada anterior que caiu no estado que foi um backtracking
     caminho[caminho.length-1].block.push(indJogada); //adiciona jogada bloqueada
@@ -195,8 +195,8 @@ function bt(caminho, fichas, propriedades, jogatinas) {
 }
 
 function verificaRepeticaoEstados(caminho, fichas, indVazio) {
-    console.log(caminho);
-    console.log(fichas);
+    //console.log(caminho);
+    //console.log(fichas);
     for(let i=0; i<caminho.length; i++) { 
         const repetiu = caminho[i].estado.every((value, index) => value === fichas[index]);
 
