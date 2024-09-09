@@ -1,5 +1,4 @@
-export function ida_estrela(n) {
-    let fichas = ['X','Y',null,'P','Z'];
+export function ida_estrela(n, fichas) {
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
     const estadoInicial = [];
     let abertos = [{estado: [], f: heuristica(fichas,0), custo: 0 ,pai: -1}]; //vai sendo explorado como uma pilha
@@ -184,6 +183,30 @@ export function ida_estrela(n) {
 
         console.log("DESCARTADOS")
         console.log(descartados);
+    }
+
+    if(sucessFail) {
+        const caminho = []; //armazena o caminho de sucesso
+
+        let pais = fechados[fechados.length-1].pai; //pai do ultimo estado
+        caminho.unshift(fechados[fechados.length-1]); //adiciona o estado final como primeiro elemento da lista do caminho
+        //a ideia é que vai buscando o pai de cada estado e vai o adicionando como primeiro elemento da lista
+        while(pais !== -1) { 
+            caminho.unshift(fechados[pais]);
+            pais = fechados[pais].pai;
+            propriedades.profundidade++;
+        }
+
+        console.log("CAMINHO: ");
+        for(let i=0; i<caminho.length; i++) { 
+            console.log(caminho[i],"-->");
+        }
+        console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
+        console.log(`CUSTO DO CAMINHO: ${fechados[fechados.length-1].custo}`);
+        console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
+        console.log(`NOS VISITADOS ${propriedades.explorados}, NOS EXPANDIDOS ${propriedades.expandidos}`);
+        console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: ${propriedades.expandidos/propriedades.explorados}`);
+        console.timeEnd('TEMPO DE EXECUCAO');
     }
 }
 
