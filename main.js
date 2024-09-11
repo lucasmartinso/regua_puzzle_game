@@ -13,6 +13,9 @@ function main(n) {
 
     embaralhaSistema(tamSistema, pecas); //gera vetor aleatorio embaralhado
 
+    console.log("\nESTADO INICIAL: "); 
+    console.log(pecas);
+
     console.log("\nBACKTRACKING");
     copiaVet(pecas, copias);
     backtracking(tamSistema, copias);
@@ -68,4 +71,4 @@ function copiaVet(fichas, copia) {
     }
 }
 
-main(2);
+main(process.argv[2]); 
