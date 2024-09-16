@@ -196,10 +196,10 @@ export function ida_estrela(n, fichas) {
             propriedades.profundidade++;
         }
 
-        //console.log("CAMINHO: ");
-        //for(let i=0; i<caminho.length; i++) { 
-        //    console.log(caminho[i],"-->");
-        //}
+        console.log("CAMINHO: ");
+        for(let i=0; i<caminho.length; i++) { 
+           console.log(caminho[i],"-->");
+        }
         console.log(`\nPATAMAR FINAL: ${patamar}`);
         console.log(`PATAMAR INICIAL: ${patamarOld}`);
         console.log(`CUSTO DA OPERACAO: ${propriedades.custo}`);

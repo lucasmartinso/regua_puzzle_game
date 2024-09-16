@@ -138,10 +138,10 @@ export function largura(n, fichas) {
             propriedades.profundidade++;
         }
 
-        //console.log("CAMINHO: ");
-        //for(let i=0; i<caminho.length; i++) { 
-        //    console.log(caminho[i],"-->");
-        //}
+        console.log("CAMINHO: ");
+        for(let i=0; i<caminho.length; i++) { 
+           console.log(caminho[i],"-->");
+        }
         console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
         console.log(`CUSTO DO CAMINHO: ${custosCaminho}`);
         console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
