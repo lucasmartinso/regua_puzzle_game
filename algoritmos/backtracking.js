@@ -159,6 +159,7 @@ export function backtracking(n, fichas) {
         } else if(verifcaFracasso(estInicial, fichas)) {
             sucessFail = false; 
             console.log("FRACASSO");
+            console.log(fichas);
             break;
         }
         //console.log("\n");

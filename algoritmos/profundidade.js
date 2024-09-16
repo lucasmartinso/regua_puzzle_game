@@ -1,7 +1,7 @@
 //COMPORTAMENTO DE PILHA
 export function profundidade(n, fichas) { 
     //-------------- DEFINICOES DAS PROPRIEDADES DO ALGORITMO -----------------
-    const abertos = [{estado: [], pai: -1}]; //vai sendo explorado como uma pilha
+    const abertos = [{estado: [], pai: -1, custo: 0}]; //vai sendo explorado como uma pilha
     const fechados = [];
     let propriedades = { custo: 0, profundidade: 0, expandidos: 1, explorados: 0};
     let sucessFail = undefined;
@@ -67,7 +67,7 @@ export function profundidade(n, fichas) {
                     copiaFichas[indVazio+1] = null;
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
-                        abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                        abertos.push({estado: copiaFichas, pai: fechados.length-1, custo: calcCustos(copiaFichas)});
                         attJogada(propriedades, copiaFichas);
                     }
                 }
@@ -84,7 +84,7 @@ export function profundidade(n, fichas) {
                     copiaFichas[indVazio-1] = null;
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
-                        abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                        abertos.push({estado: copiaFichas, pai: fechados.length-1, custo: calcCustos(copiaFichas)});
                         attJogada(propriedades, copiaFichas);
                     }
                 }
@@ -101,7 +101,7 @@ export function profundidade(n, fichas) {
                     copiaFichas[indVazio+2] = null;
                     
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
-                        abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                        abertos.push({estado: copiaFichas, pai: fechados.length-1, custo: calcCustos(copiaFichas)});
                         attJogada(propriedades, copiaFichas);
                     }
                 }
@@ -118,7 +118,7 @@ export function profundidade(n, fichas) {
                     copiaFichas[indVazio-2] = null;
 
                     if(!verificaRepeticaoEstados(fechados, abertos, copiaFichas, indVazio)) {
-                        abertos.push({estado: copiaFichas, pai: fechados.length-1});
+                        abertos.push({estado: copiaFichas, pai: fechados.length-1, custo: calcCustos(copiaFichas)});
                         attJogada(propriedades, copiaFichas);
                     }
                 }
@@ -134,11 +134,14 @@ export function profundidade(n, fichas) {
 
     if(sucessFail) {
         const caminho = [];
+        let custosCaminho = 0;
 
         let pais = fechados[fechados.length-1].pai;
         caminho.unshift(fechados[fechados.length-1]);
+        custosCaminho += fechados[fechados.length-1].custo;
         while(pais !== -1) { 
             caminho.unshift(fechados[pais]);
+            custosCaminho += fechados[pais].custo;
             pais = fechados[pais].pai;
             propriedades.profundidade++;
         }
@@ -148,6 +151,7 @@ export function profundidade(n, fichas) {
         //    console.log(caminho[i],"-->");
         //}
         console.log(`\nCUSTO DA OPERACAO: ${propriedades.custo}`);
+        console.log(`CUSTO DO CAMINHO: ${custosCaminho}`);
         console.log(`PROFUNDIDADE ALCANCADA: ${propriedades.profundidade}`);
         console.log(`NOS VISITADOS ${propriedades.explorados}, NOS EXPANDIDOS ${propriedades.expandidos}`);
         console.log(`VALOR MEDIO DO FATOR DE RAMIFICACAO DA ARVORE DE BUSCA: ${propriedades.expandidos/propriedades.explorados}`);
